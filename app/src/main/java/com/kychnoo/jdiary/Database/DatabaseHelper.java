@@ -36,7 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database) {
         //Post Create query.
-        String createUsersTable = "CREATE TABLE " + TABLE_USERS + " (" +
+        String createUsersTable = "CREATE TABLE IF NOT EXISTS " + TABLE_USERS + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_PHONE + " TEXT NOT NULL UNIQUE, " +
                 COLUMN_EMAIL + " TEXT NOT NULL UNIQUE, " +
@@ -47,9 +47,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createClassesTable = "CREATE TABLE " + TABLE_CLASSES + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_CLASS_NAME + " TEXT NOT NULL UNIQUE)";
-        database.execSQL(createUsersTable);
-        database.execSQL(createClassesTable);
-
         database.execSQL(createUsersTable);
         database.execSQL(createClassesTable);
 
