@@ -3,23 +3,19 @@
     <item
         android:id="@+id/nav_profile"
         android:icon="@mipmap/ic_launcher"
-        android:title="Профиль"/>
+        android:title="@string/nav_profile_string"/>
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_launcher_background"
-        android:title="Главная"/>
+        android:title="@string/nav_home_string"/>
 
     <item
         android:id="@+id/nav_myclass"
         android:icon="@drawable/ic_launcher_foreground"
-        android:title="Мой класс"/>
+        android:title="@string/nav_myclass_string"/>
 
     <item
         android:id="@+id/nav_diary"
         android:icon="@drawable/ic_launcher_foreground"
-        android:title="Дневник"/>
-    <item
-        android:id="@+id/nav_settings"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="Настройки"/>
+        android:title="@string/nav_diary_string"/>
 </menu>

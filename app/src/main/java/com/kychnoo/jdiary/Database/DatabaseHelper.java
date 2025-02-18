@@ -35,7 +35,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        //Post Create query.
         String createUsersTable = "CREATE TABLE IF NOT EXISTS " + TABLE_USERS + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_PHONE + " TEXT NOT NULL UNIQUE, " +

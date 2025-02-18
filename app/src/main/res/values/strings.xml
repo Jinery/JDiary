@@ -9,6 +9,15 @@
     <string name="edit_text_accept_password">Подтвердите пароль</string>
     <string name="button_select_class">Выбрать класс</string>
 
+    <!--  Navigation Drawler.-->
     <string name="navigation_drawer_open">Открыть навигацию</string>
     <string name="navigation_drawer_close">Закрыть навигацию</string>
+
+    <!--  Drawler Menu.  -->
+    <string name="nav_profile_string">Профиль</string>
+    <string name="nav_home_string">Главная</string>
+    <string name="nav_myclass_string">Мой класс</string>
+    <string name="nav_diary_string">Дневник</string>
+
+
 </resources>
