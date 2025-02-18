@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">JDiary</string>
+
+    <!--  Register_Activity.  -->
+    <string name="edit_text_username">Юзернейм</string>
+    <string name="edit_text_phone_number">Номер телефона</string>
+    <string name="edit_text_mail">Электронная почта</string>
+    <string name="edit_text_password">Пароль</string>
+    <string name="edit_text_accept_password">Подтвердите пароль</string>
+    <string name="button_select_class">Выбрать класс</string>
+
+    <string name="navigation_drawer_open">Открыть навигацию</string>
+    <string name="navigation_drawer_close">Закрыть навигацию</string>
+</resources>
