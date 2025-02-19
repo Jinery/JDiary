@@ -31,7 +31,11 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
     public void onBindViewHolder(@NonNull StudentViewHolder holder, int position) {
         Student student = studentList.get(position);
         holder.usernameText.setText(student.getUsername());
-        holder.classText.setText(student.getClassName());
+        final String userDescription = student.getDescriptionText();
+        if(userDescription == null)
+            holder.tvDescription.setText("Описание отсутствует.");
+        else
+            holder.tvDescription.setText(userDescription);
     }
 
     @Override
@@ -41,30 +45,30 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
 
     public static class StudentViewHolder extends RecyclerView.ViewHolder {
         TextView usernameText;
-        TextView classText;
+        TextView tvDescription;
 
         public StudentViewHolder(@NonNull View itemView) {
             super(itemView);
             usernameText = itemView.findViewById(R.id.username_text);
-            classText = itemView.findViewById(R.id.class_text);
+            tvDescription = itemView.findViewById(R.id.description_text);
         }
     }
 
     public static class Student {
         private String username;
-        private String className;
+        private String descriptionText;
 
-        public Student(String username, String className) {
+        public Student(String username, String descriptionText) {
             this.username = username;
-            this.className = className;
+            this.descriptionText = descriptionText;
         }
 
         public String getUsername() {
             return username;
         }
 
-        public String getClassName() {
-            return className;
+        public String getDescriptionText() {
+            return descriptionText;
         }
     }
 }

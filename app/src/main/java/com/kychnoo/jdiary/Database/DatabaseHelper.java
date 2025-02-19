@@ -24,6 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PASSWORD = "password";
     public static final String COLUMN_CLASS = "class";
     public static final String COLUMN_USERNAME = "username";
+    public static final String COLUMN_DESCRIPTION = "description";
 
     public static final String TABLE_CLASSES = "classes";
     public static final String COLUMN_CLASS_NAME = "class_name";
@@ -41,11 +42,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_EMAIL + " TEXT NOT NULL UNIQUE, " +
                 COLUMN_PASSWORD + " TEXT NOT NULL, " +
                 COLUMN_CLASS + " TEXT, " +
-                COLUMN_USERNAME + " TEXT NOT NULL UNIQUE)";
+                COLUMN_USERNAME + " TEXT NOT NULL UNIQUE, " +
+                COLUMN_DESCRIPTION  + " TEXT)";
 
         String createClassesTable = "CREATE TABLE " + TABLE_CLASSES + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_CLASS_NAME + " TEXT NOT NULL UNIQUE)";
+
         database.execSQL(createUsersTable);
         database.execSQL(createClassesTable);
 
@@ -72,6 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_EMAIL, email);
         values.put(COLUMN_PASSWORD, password);
         values.put(COLUMN_USERNAME, username);
+        values.put(COLUMN_DESCRIPTION, (String)null);
         return database.insert(TABLE_USERS, null, values);
     }
 
@@ -79,7 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         return database.query(
                 TABLE_USERS,
-                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME },
+                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION },
                 COLUMN_PHONE + " =?",
                 new String[] { phoneNumber },
                 null,
@@ -92,7 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         return database.query(
                 TABLE_USERS,
-                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME },
+                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION },
                 COLUMN_USERNAME + " =?",
                 new String[] { username },
                 null,
@@ -118,7 +122,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         return database.query(
                 TABLE_USERS,
-                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME },
+                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION },
                 COLUMN_CLASS + " =?",
                 new String[] { className },
                 null,
@@ -143,6 +147,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_CLASS, className);
+        return database.update(
+                TABLE_USERS,
+                values,
+                COLUMN_PHONE + " =?",
+                new String[] { phoneNumber }
+        );
+    }
+
+    public int updateUserDescription(String phoneNumber, String description) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_DESCRIPTION, description);
         return database.update(
                 TABLE_USERS,
                 values,

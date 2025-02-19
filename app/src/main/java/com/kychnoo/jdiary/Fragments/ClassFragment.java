@@ -58,7 +58,8 @@ public class ClassFragment extends Fragment {
             if(cursor != null && cursor.moveToFirst()) {
                 do {
                     String username = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USERNAME));
-                    studentList.add(new StudentsAdapter.Student(username, userClass));
+                    String description = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION));
+                    studentList.add(new StudentsAdapter.Student(username, description));
                 }
                 while(cursor.moveToNext());
                 cursor.close();
