@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kychnoo.jdiary.OthetClasses.Student;
 import com.kychnoo.jdiary.R;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
         Student student = studentList.get(position);
         holder.usernameText.setText(student.getUsername());
         final String userDescription = student.getDescriptionText();
-        if(userDescription == null)
+        if(userDescription == null || userDescription.isEmpty())
             holder.tvDescription.setText("Описание отсутствует.");
         else
             holder.tvDescription.setText(userDescription);
@@ -51,24 +52,6 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
             super(itemView);
             usernameText = itemView.findViewById(R.id.username_text);
             tvDescription = itemView.findViewById(R.id.description_text);
-        }
-    }
-
-    public static class Student {
-        private String username;
-        private String descriptionText;
-
-        public Student(String username, String descriptionText) {
-            this.username = username;
-            this.descriptionText = descriptionText;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public String getDescriptionText() {
-            return descriptionText;
         }
     }
 }

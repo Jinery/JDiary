@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kychnoo.jdiary.Adapters.StudentsAdapter;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
+import com.kychnoo.jdiary.OthetClasses.Student;
 import com.kychnoo.jdiary.R;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class ClassFragment extends Fragment {
     private RecyclerView recyclerView;
 
     private StudentsAdapter studentsAdapter;
-    private List<StudentsAdapter.Student> studentList;
+    private List<Student> studentList;
 
     private DatabaseHelper databaseHelper;
     private String phone;
@@ -59,7 +60,7 @@ public class ClassFragment extends Fragment {
                 do {
                     String username = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USERNAME));
                     String description = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION));
-                    studentList.add(new StudentsAdapter.Student(username, description));
+                    studentList.add(new Student(username, description));
                 }
                 while(cursor.moveToNext());
                 cursor.close();

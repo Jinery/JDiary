@@ -18,6 +18,7 @@
     <string name="nav_home_string">Главная</string>
     <string name="nav_myclass_string">Мой класс</string>
     <string name="nav_diary_string">Дневник</string>
+    <string name="nav_tests_string">Тесты</string>
 
 
 </resources>

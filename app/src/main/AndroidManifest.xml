@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -14,8 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JDiary"
         tools:targetApi="31">
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".RegisterActivity"/>
+        <activity
+            android:name=".TestActivity"
+            android:exported="false" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".RegisterActivity" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -25,7 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChooseClassActivity"/>
+        <activity android:name=".ChooseClassActivity" />
     </application>
 
 </manifest>
