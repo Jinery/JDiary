@@ -16,8 +16,11 @@ import com.kychnoo.jdiary.Database.DatabaseHelper;
 import com.kychnoo.jdiary.OthetClasses.Answer;
 import com.kychnoo.jdiary.OthetClasses.Question;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class TestActivity extends AppCompatActivity {
 
@@ -130,13 +133,37 @@ public class TestActivity extends AppCompatActivity {
 
     private void finishTest() {
         int totalQuestions = questionList.size();
-        int points = calculatePoints(totalQuestions);
-        databaseHelper.addTestResult(userPhone, testId, points);
-        Toast.makeText(this, "Тест завершен! Вы набрали " + points + " баллов.", Toast.LENGTH_LONG).show();
+        double percentage =  (correctAnswersCount / (double) totalQuestions) * 100;
+        int score = calculateGrade(percentage);
+        databaseHelper.addTestResult(userPhone, testId, (int)percentage);
+
+        int experiencePoints = (int)calculatePoints(totalQuestions);
+        databaseHelper.updateUserExperiencePoints(userPhone, experiencePoints);
+
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        databaseHelper.addGrade(userPhone, currentDate, score);
+
+        Toast.makeText(this, "Тест завершен! Вы набрали " + experiencePoints + " баллов.", Toast.LENGTH_LONG).show();
         finish();
     }
 
-    private int calculatePoints(int totalQuestions) {
-        return (int) ((correctAnswersCount / (double) totalQuestions) * 100);
+    private int calculateGrade(double percentage) {
+        if (percentage >= 90) {
+            return 5;
+        }
+        else if (percentage >= 75) {
+            return 4;
+        }
+        else if (percentage >= 50) {
+            return 3;
+        }
+        else {
+            return 2;
+        }
+    }
+
+    private double calculatePoints(int totalQuestions) {
+        int maxPoints = databaseHelper.getTestPointsById(testId);
+        return (double)maxPoints / ((double)totalQuestions / correctAnswersCount);
     }
 }

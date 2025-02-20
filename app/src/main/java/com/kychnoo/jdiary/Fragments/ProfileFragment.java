@@ -27,6 +27,7 @@ public class ProfileFragment extends Fragment {
 
 
     private TextView tvDescription;
+    private TextView tvUserPoints;
 
     @Nullable
     @Override
@@ -40,6 +41,7 @@ public class ProfileFragment extends Fragment {
         TextView tvUsername = view.findViewById(R.id.tvUsername);
         TextView tvClass = view.findViewById(R.id.tvUserClass);
         tvDescription = view.findViewById(R.id.tvUserDescription);
+        tvUserPoints = view.findViewById(R.id.tvUserPoints);
 
         tvDescription.setOnClickListener(v -> showEditDesriptionVindow(phone));
 
@@ -48,8 +50,10 @@ public class ProfileFragment extends Fragment {
             String username = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USERNAME));
             String userClass = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CLASS));
             String userDescription = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION));
+            String userPoints = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_EXPERIENCE_POINTS));
             tvUsername.setText(username);
             tvClass.setText("Ученик " + userClass + " класса.");
+            tvUserPoints.setText("У вас " + userPoints + " очков.");
             updateUserDescription(userDescription);
             cursor.close();
         } else {

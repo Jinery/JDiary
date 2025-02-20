@@ -8,8 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.kychnoo.jdiary.OthetClasses.Test;
-
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Main String's.
@@ -27,6 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_CLASS = "class";
     public static final String COLUMN_USERNAME = "username";
     public static final String COLUMN_DESCRIPTION = "description";
+    public static final String COLUMN_EXPERIENCE_POINTS = "experience_points";
 
     public static final String TABLE_CLASSES = "classes";
     public static final String COLUMN_CLASS_NAME = "class_name";
@@ -59,6 +58,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_RESULT_TEST_ID = "result_test_id";
     public static final String COLUMN_RESULT_POINTS = "result_points";
 
+    //Grades.
+    public static final String TABLE_GRADES = "grades";
+    public static final String COLUMN_GRADE_ID = "grade_id";
+    public static final String COLUMN_GRADE_USER_PHONE = "grade_user_phone";
+    public static final String COLUMN_GRADE_DATE = "grade_date";
+    public static final String COLUMN_GRADE_SCORE = "grade_score";
+
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, databaseName, null, databaseVersion);
@@ -73,7 +79,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_PASSWORD + " TEXT NOT NULL, " +
                 COLUMN_CLASS + " TEXT, " +
                 COLUMN_USERNAME + " TEXT NOT NULL UNIQUE, " +
-                COLUMN_DESCRIPTION  + " TEXT)";
+                COLUMN_DESCRIPTION  + " TEXT, " +
+                COLUMN_EXPERIENCE_POINTS + " INTEGER DEFAULT 0)";
 
         String createClassesTable = "CREATE TABLE " + TABLE_CLASSES + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -107,12 +114,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY (" + COLUMN_RESULT_USER_PHONE + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_PHONE + "), " +
                 "FOREIGN KEY (" + COLUMN_RESULT_TEST_ID + ") REFERENCES " + TABLE_TESTS + "(" + COLUMN_TEST_ID + "))";
 
+        String createGradesTable = "CREATE TABLE " + TABLE_GRADES + " (" +
+                COLUMN_GRADE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_GRADE_USER_PHONE + " TEXT NOT NULL, " +
+                COLUMN_GRADE_DATE + " TEXT NOT NULL, " +
+                COLUMN_GRADE_SCORE + " INTEGER NOT NULL, " +
+                "FOREIGN KEY (" + COLUMN_GRADE_USER_PHONE + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_PHONE + "))";
+
         database.execSQL(createUsersTable);
         database.execSQL(createClassesTable);
         database.execSQL(createTestsTable);
         database.execSQL(createQuestionsTable);
         database.execSQL(createAnswersTable);
         database.execSQL(createTestResultsTable);
+        database.execSQL(createGradesTable);
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_CLASS_NAME, "5А");
@@ -124,7 +139,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase database, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase database, int oldBase, int newBase) {
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_CLASSES);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_TESTS);
@@ -142,6 +157,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_PASSWORD, password);
         values.put(COLUMN_USERNAME, username);
         values.put(COLUMN_DESCRIPTION, (String)null);
+        values.put(COLUMN_EXPERIENCE_POINTS, 0);
         return database.insert(TABLE_USERS, null, values);
     }
 
@@ -149,7 +165,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         return database.query(
                 TABLE_USERS,
-                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION },
+                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION, COLUMN_EXPERIENCE_POINTS},
                 COLUMN_PHONE + " =?",
                 new String[] { phoneNumber },
                 null,
@@ -162,7 +178,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         return database.query(
                 TABLE_USERS,
-                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION },
+                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION, COLUMN_EXPERIENCE_POINTS},
                 COLUMN_USERNAME + " =?",
                 new String[] { username },
                 null,
@@ -219,6 +235,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 values,
                 COLUMN_PHONE + " =?",
                 new String[] { phoneNumber }
+        );
+    }
+
+    //Point Works Method.
+    public int updateUserExperiencePoints(String phoneNumber, int pointsToAdd) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_EXPERIENCE_POINTS, pointsToAdd);
+
+        Cursor cursor = getUserByPhone(phoneNumber);
+        int currentPoints = 0;
+        if (cursor != null && cursor.moveToFirst()) {
+            currentPoints = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_EXPERIENCE_POINTS));
+            cursor.close();
+        }
+
+        int newPoints = currentPoints + pointsToAdd;
+        values.put(COLUMN_EXPERIENCE_POINTS, newPoints);
+
+        return database.update(
+                TABLE_USERS,
+                values,
+                COLUMN_PHONE + " =?",
+                new String[]{ phoneNumber }
         );
     }
 
@@ -279,6 +319,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return isPasses;
     }
 
+    public int getTestPointsById(int testId) {
+        SQLiteDatabase database = this.getReadableDatabase();
+        String query = "SELECT " + COLUMN_TEST_POINTS + " FROM " + TABLE_TESTS + " WHERE " + COLUMN_TEST_ID + " =?";
+        Cursor cursor = database.rawQuery(query, new String[]{String.valueOf(testId)});
+        int points = 0;
+        if (cursor != null && cursor.moveToFirst()) {
+            points = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TEST_POINTS));
+            cursor.close();
+        }
+        return points;
+    }
+
     //Question works Methods.
     public long addQuestion(int testId, String questionText) {
         SQLiteDatabase database = this.getWritableDatabase();
@@ -332,5 +384,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_RESULT_TEST_ID, testId);
         values.put(COLUMN_RESULT_POINTS, points);
         return database.insert(TABLE_TEST_RESULTS, null, values);
+    }
+
+    //Grades works Methods.
+    public long addGrade(String userPhone, String date, int score) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_GRADE_USER_PHONE, userPhone);
+        values.put(COLUMN_GRADE_DATE, date);
+        values.put(COLUMN_GRADE_SCORE, score);
+        return database.insert(TABLE_GRADES, null, values);
+    }
+
+    public Cursor getGradesByUser(String userPhone) {
+        SQLiteDatabase database = getReadableDatabase();
+        return database.query(
+                TABLE_GRADES,
+                new String[] { COLUMN_GRADE_ID, COLUMN_GRADE_USER_PHONE, COLUMN_GRADE_DATE, COLUMN_GRADE_SCORE },
+                COLUMN_GRADE_USER_PHONE + " =?",
+                new String[] { userPhone },
+                null,
+                null,
+                COLUMN_GRADE_DATE + " DESC"
+        );
     }
 }

@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kychnoo.jdiary.Database.DatabaseHelper;
-import com.kychnoo.jdiary.Notifications.NotificationHelper;
 
 public class RegisterActivity extends AppCompatActivity {
 
