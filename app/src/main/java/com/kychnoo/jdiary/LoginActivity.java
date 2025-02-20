@@ -43,6 +43,16 @@ public class LoginActivity extends AppCompatActivity {
                 String phoneNumber = etPhone.getText().toString();
                 String password = etPassword.getText().toString();
 
+                if(phoneNumber.trim().isEmpty() || password.trim().isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!phoneNumber.trim().matches("\\d+")) {
+                    Toast.makeText(LoginActivity.this, "Номер телефона должен содержать только цифры", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Cursor cursor = databaseHelper.getUserByPhone(phoneNumber);
                 try {
                     if (cursor != null && cursor.moveToFirst()) {
@@ -63,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                             }
                         } else {
-                            Toast.makeText(LoginActivity.this, "Неверный пароль.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Неверный пароль", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(LoginActivity.this, "Пользователь не найден", Toast.LENGTH_SHORT).show();

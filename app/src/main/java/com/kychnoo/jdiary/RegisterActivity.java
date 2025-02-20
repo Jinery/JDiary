@@ -52,6 +52,21 @@ public class RegisterActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString();
                 String acceptPassword = etAcceptPassword.getText().toString();
 
+                if(username.trim().isEmpty() || phoneNumber.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty() || acceptPassword.trim().isEmpty()) {
+                    Toast.makeText(RegisterActivity.this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!phoneNumber.trim().matches("\\d+")) {
+                    Toast.makeText(RegisterActivity.this, "Номер телефона должен содержать только цифры", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!email.trim().matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
+                    Toast.makeText(RegisterActivity.this, "Введите корректный адрес электронной почты", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if(!password.equals(acceptPassword)) {
                     Toast.makeText(RegisterActivity.this, "Пароли не совпадают", Toast.LENGTH_SHORT).show();
                     return;
