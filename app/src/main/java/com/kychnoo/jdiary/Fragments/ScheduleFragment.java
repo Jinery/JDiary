@@ -31,6 +31,8 @@ public class ScheduleFragment extends Fragment {
 
     private ToolbarTitleSetter toolbarTitleSetter;
 
+    private String phone;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -53,6 +55,8 @@ public class ScheduleFragment extends Fragment {
 
         toolbarTitleSetter.setToolbarTitle("Расписание");
 
+        phone = requireActivity().getIntent().getStringExtra("phone");
+
         recyclerView = view.findViewById(R.id.rvSchedules);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
@@ -65,17 +69,24 @@ public class ScheduleFragment extends Fragment {
 
     private void loadSchedules() {
 
-        Cursor cursor = databaseHelper.getAllSchedules();
-        if (cursor.moveToFirst()) {
-            do {
-                long id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SCHEDULE_ID));
-                String date = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SCHEDULE_DATE));
-                int lessonsCount = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SCHEDULE_LESSONS_COUNT));
-                String className = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SCHEDULE_CLASS));
-                scheduleItems.add(new Schedule(id, date, lessonsCount, className));
-            } while (cursor.moveToNext());
+        String userClass = null;
+        Cursor cursor = databaseHelper.getUserByPhone(phone);
+        if(cursor != null && cursor.moveToFirst()) {
+            userClass = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CLASS));
+            cursor.close();
         }
-        cursor.close();
+
+        Cursor sCursor = databaseHelper.getSchedulesByClass(userClass);
+        if (sCursor.moveToFirst()) {
+            do {
+                long id = sCursor.getLong(sCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SCHEDULE_ID));
+                String date = sCursor.getString(sCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SCHEDULE_DATE));
+                int lessonsCount = sCursor.getInt(sCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SCHEDULE_LESSONS_COUNT));
+                String className = sCursor.getString(sCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_SCHEDULE_CLASS));
+                scheduleItems.add(new Schedule(id, date, lessonsCount, className));
+            } while (sCursor.moveToNext());
+        }
+        sCursor.close();
 
         adapter = new ScheduleAdapter(requireContext(), scheduleItems);
         recyclerView.setAdapter(adapter);

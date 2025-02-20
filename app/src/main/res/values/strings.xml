@@ -20,6 +20,14 @@
     <string name="nav_diary_string">Дневник</string>
     <string name="nav_schedule_string">Расписание</string>
     <string name="nav_tests_string">Тесты</string>
+    <string name="nav_notes_string">Заметки</string>
+
+    <!-- Notes Fragment. -->
+    <string name="add_note_text">Новая заметка</string>
+
+    <!--  Notes dialog. -->
+    <string name="nav_input_title">Название заметки</string>
+    <string name="nav_input_content">Текст заметки</string>
 
 
 </resources>

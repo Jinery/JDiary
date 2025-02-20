@@ -1,6 +1,9 @@
 package com.kychnoo.jdiary;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +22,7 @@ import com.kychnoo.jdiary.Database.DatabaseHelper;
 import com.kychnoo.jdiary.Fragments.ClassFragment;
 import com.kychnoo.jdiary.Fragments.DiaryFragment;
 import com.kychnoo.jdiary.Fragments.HomeFragment;
+import com.kychnoo.jdiary.Fragments.NotesFragment;
 import com.kychnoo.jdiary.Fragments.ProfileFragment;
 import com.kychnoo.jdiary.Fragments.ScheduleFragment;
 import com.kychnoo.jdiary.Fragments.TestsFragment;
@@ -187,6 +191,9 @@ public class MainActivity extends AppCompatActivity implements ToolbarTitleSette
                 }
                 else if(id == R.id.nav_tests) {
                     navigateToFragment(new TestsFragment(), R.id.nav_tests);
+                }
+                else if(id == R.id.nav_notes) {
+                    navigateToFragment(new NotesFragment(), R.id.nav_notes);
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START);

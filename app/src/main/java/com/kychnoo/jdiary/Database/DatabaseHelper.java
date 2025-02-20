@@ -80,6 +80,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_LESSON_SUBJECT = "lesson_subject";
     public static final String COLUMN_LESSON_HOMEWORK = "lesson_homework";
 
+    //Notes.
+    public static final String TABLE_NOTES = "notes";
+    public static final String COLUMN_NOTE_ID = "note_id";
+    public static final String COLUMN_NOTE_USER_PHONE = "note_user_phone";
+    public static final String COLUMN_NOTE_TITLE = "note_title";
+    public static final String COLUMN_NOTE_CONTENT = "note_content";
+    public static final String COLUMN_NOTE_DATE = "note_date";
+
+    //Achievements.
+    public static final String TABLE_ACHIEVEMENTS = "achievements";
+    public static final String COLUMN_ACHIEVEMENT_ID = "achievement_id";
+    public static final String COLUMN_ACHIEVEMENT_TITLE = "achievement_title";
+    public static final String COLUMN_ACHIEVEMENT_DESCRIPTION = "achievement_description";
+
+    //User Achievements.
+    public static final String TABLE_USER_ACHIEVEMENTS = "user_achievements";
+    public static final String COLUMN_USER_ACHIEVEMENT_ID = "user_achievement_id";
+    public static final String COLUMN_USER_ACHIEVEMENT_USER_PHONE = "user_phone";
+    public static final String COLUMN_USER_ACHIEVEMENT_ACHIEVEMENT_ID = "achievement_id";
+
     public DatabaseHelper(@Nullable Context context) {
         super(context, databaseName, null, databaseVersion);
     }
@@ -149,6 +169,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_LESSON_HOMEWORK + " TEXT, " +
                 "FOREIGN KEY (" + COLUMN_LESSON_SCHEDULE_ID + ") REFERENCES " + TABLE_SCHEDULE + "(" + COLUMN_SCHEDULE_ID + "))";
 
+        String createNotesTable = "CREATE TABLE " + TABLE_NOTES + " (" +
+                COLUMN_NOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_NOTE_USER_PHONE + " TEXT NOT NULL, " +
+                COLUMN_NOTE_TITLE + " TEXT NOT NULL, " +
+                COLUMN_NOTE_CONTENT + " TEXT NOT NULL, " +
+                COLUMN_NOTE_DATE + " TEXT NOT NULL, " +
+                "FOREIGN KEY (" + COLUMN_NOTE_USER_PHONE + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_PHONE + "))";
+
         database.execSQL(createUsersTable);
         database.execSQL(createClassesTable);
         database.execSQL(createTestsTable);
@@ -158,6 +186,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(createGradesTable);
         database.execSQL(createScheduleTable);
         database.execSQL(createLessonsTable);
+        database.execSQL(createNotesTable);
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_CLASS_NAME, "5А");
@@ -179,6 +208,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_GRADES);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_SCHEDULE);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_LESSONS);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTES);
         onCreate(database);
     }
 
@@ -487,10 +517,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return exists;
     }
 
-    public Cursor getScheduleByDateAndClass(String date, String className) {
+    public Cursor getSchedulesByClass(String className) {
         SQLiteDatabase database = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_SCHEDULE + " WHERE " + COLUMN_SCHEDULE_DATE + " =? AND " + COLUMN_SCHEDULE_CLASS + " =?";
-        return database.rawQuery(query, new String[]{date, className});
+        return database.query(
+                TABLE_SCHEDULE,
+                new String[] { COLUMN_SCHEDULE_ID, COLUMN_SCHEDULE_DATE, COLUMN_SCHEDULE_LESSONS_COUNT, COLUMN_SCHEDULE_CLASS },
+                COLUMN_SCHEDULE_CLASS + " =?",
+                new String[] { className },
+                null,
+                null,
+                COLUMN_SCHEDULE_DATE + " ASC"
+        );
     }
 
     //Lesson works Method.
@@ -507,12 +544,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         return database.query(
                 TABLE_LESSONS,
-                new String[]{COLUMN_LESSON_ID, COLUMN_LESSON_SCHEDULE_ID, COLUMN_LESSON_SUBJECT, COLUMN_LESSON_HOMEWORK},
+                new String[]{ COLUMN_LESSON_ID, COLUMN_LESSON_SCHEDULE_ID, COLUMN_LESSON_SUBJECT, COLUMN_LESSON_HOMEWORK },
                 COLUMN_LESSON_SCHEDULE_ID + " =?",
                 new String[]{String.valueOf(scheduleId)},
                 null,
                 null,
                 null
+        );
+    }
+
+    //Notes works Methods.
+    public long addNote(String userPhone, String title, String content, String date) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NOTE_USER_PHONE, userPhone);
+        values.put(COLUMN_NOTE_TITLE, title);
+        values.put(COLUMN_NOTE_CONTENT, content);
+        values.put(COLUMN_NOTE_DATE, date);
+        return database.insert(TABLE_NOTES, null, values);
+    }
+
+    public long updateNote(int noteId, String title, String content, String date) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NOTE_TITLE, title);
+        values.put(COLUMN_NOTE_CONTENT, content);
+        values.put(COLUMN_NOTE_DATE, date);
+        return database.update(TABLE_NOTES, values, COLUMN_NOTE_ID + " =?", new String[]{String.valueOf(noteId)});
+    }
+
+    public int deleteNote(int noteId) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        return database.delete(TABLE_NOTES, COLUMN_NOTE_ID + " =?", new String[]{String.valueOf(noteId)});
+    }
+
+    public Cursor getNotesByUser(String userPhone) {
+        SQLiteDatabase database = this.getReadableDatabase();
+        return database.query(
+                TABLE_NOTES,
+                new String[]{ COLUMN_NOTE_ID, COLUMN_NOTE_USER_PHONE, COLUMN_NOTE_TITLE, COLUMN_NOTE_CONTENT, COLUMN_NOTE_DATE },
+                COLUMN_NOTE_USER_PHONE + " =?",
+                new String[]{ userPhone },
+                null,
+                null,
+                COLUMN_NOTE_DATE + " DESC"
         );
     }
 }
