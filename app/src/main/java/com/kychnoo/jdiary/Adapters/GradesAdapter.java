@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.kychnoo.jdiary.OthetClasses.Grade;
+import com.kychnoo.jdiary.OtherClasses.Grade;
 import com.kychnoo.jdiary.R;
 
 import java.util.List;
@@ -44,15 +44,18 @@ public class GradesAdapter extends RecyclerView.Adapter<GradesAdapter.GradesView
 
         private TextView tvDate;
         private TextView tvScore;
+        private TextView tvGradeText;
 
         public GradesViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvDate = itemView.findViewById(R.id.tvDate);
             tvScore = itemView.findViewById(R.id.tvScore);
+            tvGradeText = itemView.findViewById(R.id.tvGradeText);
         }
 
         public void bind(Grade grade) {
+            tvGradeText.setText(grade.getGradeText());
             tvDate.setText(grade.getDate());
             tvScore.setText("Оценка: " + grade.getScore());
         }

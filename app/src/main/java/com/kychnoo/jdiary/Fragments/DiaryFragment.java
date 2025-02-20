@@ -1,5 +1,6 @@
 package com.kychnoo.jdiary.Fragments;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kychnoo.jdiary.Adapters.GradesAdapter;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
-import com.kychnoo.jdiary.OthetClasses.Grade;
+import com.kychnoo.jdiary.Interfaces.ToolbarTitleSetter;
+import com.kychnoo.jdiary.OtherClasses.Grade;
 import com.kychnoo.jdiary.R;
 
 import java.util.ArrayList;
@@ -30,12 +32,29 @@ public class DiaryFragment extends Fragment {
 
     private String phone;
 
+    private ToolbarTitleSetter toolbarTitleSetter;
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof ToolbarTitleSetter)
+            toolbarTitleSetter = (ToolbarTitleSetter) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        toolbarTitleSetter = null;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_diary, container, false);
+
+        toolbarTitleSetter.setToolbarTitle("Дневник");
 
         databaseHelper = new DatabaseHelper(requireContext());
 
@@ -57,9 +76,10 @@ public class DiaryFragment extends Fragment {
             while(cursor.moveToNext()) {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_GRADE_ID));
                 String userPhone = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_GRADE_USER_PHONE));
+                String gradeText = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_GRADE_TEXT));
                 String date = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_GRADE_DATE));
                 int score = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_GRADE_SCORE));
-                gradeList.add(new Grade(id, userPhone, date, score));
+                gradeList.add(new Grade(id, userPhone, gradeText, "Дата: " + date, score));
             }
             cursor.close();
             gradesAdapter = new GradesAdapter(gradeList);

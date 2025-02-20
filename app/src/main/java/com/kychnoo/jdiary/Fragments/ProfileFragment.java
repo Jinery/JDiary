@@ -1,6 +1,7 @@
 package com.kychnoo.jdiary.Fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.kychnoo.jdiary.Database.DatabaseHelper;
+import com.kychnoo.jdiary.Interfaces.ToolbarTitleSetter;
 import com.kychnoo.jdiary.R;
 
 public class ProfileFragment extends Fragment {
@@ -29,10 +31,28 @@ public class ProfileFragment extends Fragment {
     private TextView tvDescription;
     private TextView tvUserPoints;
 
+    private ToolbarTitleSetter toolbarTitleSetter;
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof ToolbarTitleSetter)
+            toolbarTitleSetter = (ToolbarTitleSetter) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        toolbarTitleSetter = null;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        toolbarTitleSetter.setToolbarTitle("Профиль");
 
         databaseHelper = new DatabaseHelper(requireContext());
 

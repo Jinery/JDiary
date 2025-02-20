@@ -1,4 +1,4 @@
-package com.kychnoo.jdiary.OthetClasses;
+package com.kychnoo.jdiary.OtherClasses;
 
 public class Test {
 

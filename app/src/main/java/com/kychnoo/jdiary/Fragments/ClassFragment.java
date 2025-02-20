@@ -1,5 +1,6 @@
 package com.kychnoo.jdiary.Fragments;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kychnoo.jdiary.Adapters.StudentsAdapter;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
-import com.kychnoo.jdiary.OthetClasses.Student;
+import com.kychnoo.jdiary.Interfaces.ToolbarTitleSetter;
+import com.kychnoo.jdiary.OtherClasses.Student;
 import com.kychnoo.jdiary.R;
 
 import java.util.ArrayList;
@@ -31,10 +33,28 @@ public class ClassFragment extends Fragment {
     private DatabaseHelper databaseHelper;
     private String phone;
 
+    private ToolbarTitleSetter toolbarTitleSetter;
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof ToolbarTitleSetter)
+            toolbarTitleSetter = (ToolbarTitleSetter) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        toolbarTitleSetter = null;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_class, container, false);
+
+        toolbarTitleSetter.setToolbarTitle("Мой лкасс");
 
         databaseHelper = new DatabaseHelper(requireContext());
         recyclerView = view.findViewById(R.id.classRecyclerView);

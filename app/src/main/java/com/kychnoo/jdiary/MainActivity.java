@@ -20,14 +20,17 @@ import com.kychnoo.jdiary.Fragments.ClassFragment;
 import com.kychnoo.jdiary.Fragments.DiaryFragment;
 import com.kychnoo.jdiary.Fragments.HomeFragment;
 import com.kychnoo.jdiary.Fragments.ProfileFragment;
+import com.kychnoo.jdiary.Fragments.ScheduleFragment;
 import com.kychnoo.jdiary.Fragments.TestsFragment;
+import com.kychnoo.jdiary.Interfaces.ToolbarTitleSetter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ToolbarTitleSetter {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private DatabaseHelper databaseHelper;
     private String phone;
+    private androidx.appcompat.widget.Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,8 +132,17 @@ public class MainActivity extends AppCompatActivity {
             databaseHelper.addAnswer((int)q6Id_soc, "Наваратри", false);
         }
 
-        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        if (!databaseHelper.isExistScheduleIsDate("21.02.2025", "5А")) {
+            long scheduleId = databaseHelper.addSchedule("21.02.2025", 3, "5А");
+            databaseHelper.addLesson(scheduleId, "Литература", "Дочитать произведение: \"Война и мир.\"");
+            databaseHelper.addLesson(scheduleId, "Математика", "Решить задачи №1-10.");
+            databaseHelper.addLesson(scheduleId, "История", "Параграф 15");
+        }
+
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        toolbar.setTitle("Home");
 
         View headerView = navigationView.getHeaderView(0);
         TextView tvPhone = headerView.findViewById(R.id.tvProfile);
@@ -163,6 +175,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if(id == R.id.nav_diary) {
                     navigateToFragment(new DiaryFragment(), R.id.nav_diary);
+                }
+                else if(id == R.id.nav_schedule){
+                    navigateToFragment(new ScheduleFragment(), R.id.nav_schedule);
                 }
                 else if(id == R.id.nav_profile) {
                     navigateToFragment(new ProfileFragment(), R.id.nav_profile);
@@ -198,5 +213,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void setToolbarTitle(String title) {
+        if(toolbar != null)
+            toolbar.setTitle(title);
     }
 }

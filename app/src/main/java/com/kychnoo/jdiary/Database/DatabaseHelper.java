@@ -62,9 +62,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_GRADES = "grades";
     public static final String COLUMN_GRADE_ID = "grade_id";
     public static final String COLUMN_GRADE_USER_PHONE = "grade_user_phone";
+    public static final String COLUMN_GRADE_TEXT = "grade_text";
     public static final String COLUMN_GRADE_DATE = "grade_date";
     public static final String COLUMN_GRADE_SCORE = "grade_score";
 
+    //Schedule.
+    public static final String TABLE_SCHEDULE = "schedule";
+    public static final String COLUMN_SCHEDULE_ID = "schedule_id";
+    public static final String COLUMN_SCHEDULE_DATE = "schedule_date";
+    public static final String COLUMN_SCHEDULE_LESSONS_COUNT = "lessons_count";
+    public static final String COLUMN_SCHEDULE_CLASS = "schedule_class";
+
+    //Lessons.
+    public static final String TABLE_LESSONS = "lessons";
+    public static final String COLUMN_LESSON_ID = "lesson_id";
+    public static final String COLUMN_LESSON_SCHEDULE_ID = "lesson_schedule_id";
+    public static final String COLUMN_LESSON_SUBJECT = "lesson_subject";
+    public static final String COLUMN_LESSON_HOMEWORK = "lesson_homework";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, databaseName, null, databaseVersion);
@@ -117,9 +131,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createGradesTable = "CREATE TABLE " + TABLE_GRADES + " (" +
                 COLUMN_GRADE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_GRADE_USER_PHONE + " TEXT NOT NULL, " +
+                COLUMN_GRADE_TEXT + " TEXT NOT NULL, " +
                 COLUMN_GRADE_DATE + " TEXT NOT NULL, " +
                 COLUMN_GRADE_SCORE + " INTEGER NOT NULL, " +
                 "FOREIGN KEY (" + COLUMN_GRADE_USER_PHONE + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_PHONE + "))";
+
+        String createScheduleTable = "CREATE TABLE " + TABLE_SCHEDULE + " (" +
+                COLUMN_SCHEDULE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_SCHEDULE_DATE + " TEXT NOT NULL, " +
+                COLUMN_SCHEDULE_LESSONS_COUNT + " INTEGER NOT NULL, " +
+                COLUMN_SCHEDULE_CLASS + " TEXT NOT NULL)";
+
+        String createLessonsTable = "CREATE TABLE " + TABLE_LESSONS + " (" +
+                COLUMN_LESSON_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_LESSON_SCHEDULE_ID + " INTEGER NOT NULL, " +
+                COLUMN_LESSON_SUBJECT + " TEXT NOT NULL, " +
+                COLUMN_LESSON_HOMEWORK + " TEXT, " +
+                "FOREIGN KEY (" + COLUMN_LESSON_SCHEDULE_ID + ") REFERENCES " + TABLE_SCHEDULE + "(" + COLUMN_SCHEDULE_ID + "))";
 
         database.execSQL(createUsersTable);
         database.execSQL(createClassesTable);
@@ -128,6 +156,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(createAnswersTable);
         database.execSQL(createTestResultsTable);
         database.execSQL(createGradesTable);
+        database.execSQL(createScheduleTable);
+        database.execSQL(createLessonsTable);
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_CLASS_NAME, "5А");
@@ -146,6 +176,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_QUESTIONS);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_ANSWERS);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_TEST_RESULTS);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_GRADES);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_SCHEDULE);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_LESSONS);
         onCreate(database);
     }
 
@@ -331,6 +364,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return points;
     }
 
+    public String getTestNameById(int testId) {
+        SQLiteDatabase database = this.getReadableDatabase();
+        String query = "SELECT " + COLUMN_TEST_NAME + " FROM " + TABLE_TESTS + " WHERE " + COLUMN_TEST_ID + " =?";
+        Cursor cursor = database.rawQuery(query, new String[]{String.valueOf(testId)});
+        String testName = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            testName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TEST_NAME));
+            cursor.close();
+        }
+        return testName;
+    }
+
     //Question works Methods.
     public long addQuestion(int testId, String questionText) {
         SQLiteDatabase database = this.getWritableDatabase();
@@ -387,10 +432,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Grades works Methods.
-    public long addGrade(String userPhone, String date, int score) {
+    public long addGrade(String userPhone, String gradeText, String date, int score) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_GRADE_USER_PHONE, userPhone);
+        values.put(COLUMN_GRADE_TEXT, gradeText);
         values.put(COLUMN_GRADE_DATE, date);
         values.put(COLUMN_GRADE_SCORE, score);
         return database.insert(TABLE_GRADES, null, values);
@@ -400,12 +446,73 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = getReadableDatabase();
         return database.query(
                 TABLE_GRADES,
-                new String[] { COLUMN_GRADE_ID, COLUMN_GRADE_USER_PHONE, COLUMN_GRADE_DATE, COLUMN_GRADE_SCORE },
+                new String[] { COLUMN_GRADE_ID, COLUMN_GRADE_USER_PHONE, COLUMN_GRADE_TEXT, COLUMN_GRADE_DATE, COLUMN_GRADE_SCORE },
                 COLUMN_GRADE_USER_PHONE + " =?",
                 new String[] { userPhone },
                 null,
                 null,
                 COLUMN_GRADE_DATE + " DESC"
+        );
+    }
+
+    //Schelude works Methods.
+    public long addSchedule(String date, int lessonsCount, String className) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_SCHEDULE_DATE, date);
+        values.put(COLUMN_SCHEDULE_LESSONS_COUNT, lessonsCount);
+        values.put(COLUMN_SCHEDULE_CLASS, className);
+        return database.insert(TABLE_SCHEDULE, null, values);
+    }
+
+    public Cursor getAllSchedules() {
+        SQLiteDatabase database = this.getReadableDatabase();
+        return database.query(
+                TABLE_SCHEDULE,
+                new String[]{COLUMN_SCHEDULE_ID, COLUMN_SCHEDULE_DATE, COLUMN_SCHEDULE_LESSONS_COUNT, COLUMN_SCHEDULE_CLASS},
+                null,
+                null,
+                null,
+                null,
+                COLUMN_SCHEDULE_DATE + " ASC"
+        );
+    }
+
+    public boolean isExistScheduleIsDate(String date, String className) {
+        SQLiteDatabase database = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_SCHEDULE + " WHERE " + COLUMN_SCHEDULE_DATE + " =? AND " + COLUMN_SCHEDULE_CLASS + " =?";
+        Cursor cursor = database.rawQuery(query, new String[]{date, className});
+        boolean exists = cursor.moveToFirst();
+        cursor.close();
+        return exists;
+    }
+
+    public Cursor getScheduleByDateAndClass(String date, String className) {
+        SQLiteDatabase database = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_SCHEDULE + " WHERE " + COLUMN_SCHEDULE_DATE + " =? AND " + COLUMN_SCHEDULE_CLASS + " =?";
+        return database.rawQuery(query, new String[]{date, className});
+    }
+
+    //Lesson works Method.
+    public long addLesson(long scheduleId, String subject, String homework) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_LESSON_SCHEDULE_ID, scheduleId);
+        values.put(COLUMN_LESSON_SUBJECT, subject);
+        values.put(COLUMN_LESSON_HOMEWORK, homework);
+        return database.insert(TABLE_LESSONS, null, values);
+    }
+
+    public Cursor getLessonsByScheduleId(long scheduleId) {
+        SQLiteDatabase database = this.getReadableDatabase();
+        return database.query(
+                TABLE_LESSONS,
+                new String[]{COLUMN_LESSON_ID, COLUMN_LESSON_SCHEDULE_ID, COLUMN_LESSON_SUBJECT, COLUMN_LESSON_HOMEWORK},
+                COLUMN_LESSON_SCHEDULE_ID + " =?",
+                new String[]{String.valueOf(scheduleId)},
+                null,
+                null,
+                null
         );
     }
 }

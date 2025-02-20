@@ -1,15 +1,18 @@
-package com.kychnoo.jdiary.OthetClasses;
+package com.kychnoo.jdiary.OtherClasses;
 
 public class Grade {
 
     private int id;
-    private String userPhone;
-    private String date;
     private int score;
 
-    public Grade(int id, String userPhone, String date, int score) {
+    private String userPhone;
+    private String gradeText;
+    private String date;
+
+    public Grade(int id, String userPhone, String gradeText, String date, int score) {
         this.id = id;
         this.userPhone = userPhone;
+        this.gradeText = gradeText;
         this.date = date;
         this.score = score;
     }
@@ -24,6 +27,10 @@ public class Grade {
 
     public String getUserPhone() {
         return userPhone;
+    }
+
+    public String getGradeText() {
+        return gradeText;
     }
 
     public String getDate() {

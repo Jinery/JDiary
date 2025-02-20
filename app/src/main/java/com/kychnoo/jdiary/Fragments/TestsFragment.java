@@ -1,9 +1,9 @@
 package com.kychnoo.jdiary.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kychnoo.jdiary.Adapters.TestsAdapter;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
-import com.kychnoo.jdiary.OthetClasses.Test;
+import com.kychnoo.jdiary.Interfaces.ToolbarTitleSetter;
+import com.kychnoo.jdiary.OtherClasses.Test;
 import com.kychnoo.jdiary.R;
 import com.kychnoo.jdiary.TestActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestsFragment extends Fragment implements TestsAdapter.OnTestClickListener{
+public class TestsFragment extends Fragment implements TestsAdapter.OnTestClickListener {
 
     private RecyclerView rvTests;
 
@@ -34,10 +35,28 @@ public class TestsFragment extends Fragment implements TestsAdapter.OnTestClickL
 
     private String phone;
 
+    private ToolbarTitleSetter toolbarTitleSetter;
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof ToolbarTitleSetter)
+            toolbarTitleSetter = (ToolbarTitleSetter) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        toolbarTitleSetter = null;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tests, container, false);
+
+        toolbarTitleSetter.setToolbarTitle("Мои тесты");
 
         databaseHelper = new DatabaseHelper(requireContext());
         phone = requireActivity().getIntent().getStringExtra("phone");

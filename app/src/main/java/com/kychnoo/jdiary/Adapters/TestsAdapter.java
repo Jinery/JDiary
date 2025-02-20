@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.kychnoo.jdiary.OthetClasses.Test;
+import com.kychnoo.jdiary.OtherClasses.Test;
 import com.kychnoo.jdiary.R;
 
 import java.util.List;

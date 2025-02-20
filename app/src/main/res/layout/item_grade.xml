@@ -7,17 +7,23 @@
     android:background="@color/snow">
 
     <TextView
+        android:id="@+id/tvGradeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+    <TextView
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:textSize="16sp"/>
     
     <TextView
         android:id="@+id/tvScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:layout_marginTop="4dp"/>
 
 </LinearLayout>

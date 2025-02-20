@@ -13,8 +13,8 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kychnoo.jdiary.Database.DatabaseHelper;
-import com.kychnoo.jdiary.OthetClasses.Answer;
-import com.kychnoo.jdiary.OthetClasses.Question;
+import com.kychnoo.jdiary.OtherClasses.Answer;
+import com.kychnoo.jdiary.OtherClasses.Question;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -135,13 +135,14 @@ public class TestActivity extends AppCompatActivity {
         int totalQuestions = questionList.size();
         double percentage =  (correctAnswersCount / (double) totalQuestions) * 100;
         int score = calculateGrade(percentage);
+        String exitText = "Выполнен тест: " + databaseHelper.getTestNameById(testId);
         databaseHelper.addTestResult(userPhone, testId, (int)percentage);
 
         int experiencePoints = (int)calculatePoints(totalQuestions);
         databaseHelper.updateUserExperiencePoints(userPhone, experiencePoints);
 
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        databaseHelper.addGrade(userPhone, currentDate, score);
+        databaseHelper.addGrade(userPhone, exitText, currentDate, score);
 
         Toast.makeText(this, "Тест завершен! Вы набрали " + experiencePoints + " баллов.", Toast.LENGTH_LONG).show();
         finish();

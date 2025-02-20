@@ -15,6 +15,9 @@
         android:theme="@style/Theme.JDiary"
         tools:targetApi="31">
         <activity
+            android:name=".ScheduleDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".TestActivity"
             android:exported="false" />
         <activity android:name=".MainActivity" />
