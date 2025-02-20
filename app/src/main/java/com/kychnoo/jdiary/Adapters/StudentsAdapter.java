@@ -37,6 +37,8 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
             holder.tvDescription.setText("Описание отсутствует.");
         else
             holder.tvDescription.setText(userDescription);
+
+        holder.tvExperincePoints.setText("Очков: " + student.getExperiencePoints());
     }
 
     @Override
@@ -47,11 +49,13 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
     public static class StudentViewHolder extends RecyclerView.ViewHolder {
         TextView usernameText;
         TextView tvDescription;
+        TextView tvExperincePoints;
 
         public StudentViewHolder(@NonNull View itemView) {
             super(itemView);
-            usernameText = itemView.findViewById(R.id.username_text);
-            tvDescription = itemView.findViewById(R.id.description_text);
+            usernameText = itemView.findViewById(R.id.tvUsername);
+            tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvExperincePoints = itemView.findViewById(R.id.tvExperiencePoints);
         }
     }
 }

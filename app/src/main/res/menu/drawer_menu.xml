@@ -4,10 +4,6 @@
         android:id="@+id/nav_profile"
         android:icon="@mipmap/ic_launcher"
         android:title="@string/nav_profile_string"/>
-    <item
-        android:id="@+id/nav_home"
-        android:icon="@drawable/ic_launcher_background"
-        android:title="@string/nav_home_string"/>
 
     <item
         android:id="@+id/nav_myclass"

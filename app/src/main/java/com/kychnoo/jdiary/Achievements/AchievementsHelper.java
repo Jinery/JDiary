@@ -22,7 +22,7 @@ public class AchievementsHelper {
     private static void createAchievements() {
 
         if(!databaseHelper.isAchievementExistsByName("Теперь я с вами"))
-            databaseHelper.addAchievement("Теперь я с вами", "Зарегестрироваться в приложении.");
+            databaseHelper.addAchievement("Теперь я с вами", "Зарегистрироваться в приложении.");
 
         if(!databaseHelper.isAchievementExistsByName("Это только начало"))
             databaseHelper.addAchievement("Это только начало", "Пройти свой первый тест.");

@@ -1,9 +1,6 @@
 package com.kychnoo.jdiary;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,11 +16,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
 import com.kychnoo.jdiary.Achievements.AchievementsHelper;
-import com.kychnoo.jdiary.Adapters.AchievementsAdapter;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
 import com.kychnoo.jdiary.Fragments.ClassFragment;
 import com.kychnoo.jdiary.Fragments.DiaryFragment;
-import com.kychnoo.jdiary.Fragments.HomeFragment;
 import com.kychnoo.jdiary.Fragments.NotesFragment;
 import com.kychnoo.jdiary.Fragments.ProfileFragment;
 import com.kychnoo.jdiary.Fragments.ScheduleFragment;
@@ -180,10 +175,7 @@ public class MainActivity extends AppCompatActivity implements ToolbarTitleSette
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
 
-                if (id == R.id.nav_home) {
-                    navigateToFragment(new HomeFragment(), R.id.nav_home);
-                }
-                else if(id == R.id.nav_diary) {
+                if(id == R.id.nav_diary) {
                     navigateToFragment(new DiaryFragment(), R.id.nav_diary);
                 }
                 else if(id == R.id.nav_schedule){
@@ -208,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements ToolbarTitleSette
         });
 
         if (savedInstanceState == null) {
-            navigateToFragment(new HomeFragment(), R.id.nav_home);
+            navigateToFragment(new ProfileFragment(), R.id.nav_profile);
         }
     }
 

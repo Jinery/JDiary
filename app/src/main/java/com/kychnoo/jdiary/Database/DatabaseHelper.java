@@ -284,12 +284,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         return database.query(
                 TABLE_USERS,
-                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION },
+                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION, COLUMN_EXPERIENCE_POINTS },
                 COLUMN_CLASS + " =?",
                 new String[] { className },
                 null,
                 null,
-                null
+                COLUMN_EXPERIENCE_POINTS + " DESC"
         );
     }
 
@@ -337,7 +337,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 TABLE_USERS,
                 values,
                 COLUMN_PHONE + " =?",
-                new String[]{ phoneNumber }
+                new String[] { phoneNumber }
         );
     }
 

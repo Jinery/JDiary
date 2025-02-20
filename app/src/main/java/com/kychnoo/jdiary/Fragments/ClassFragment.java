@@ -54,7 +54,7 @@ public class ClassFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_class, container, false);
 
-        toolbarTitleSetter.setToolbarTitle("Мой лкасс");
+        toolbarTitleSetter.setToolbarTitle("Мой класс");
 
         databaseHelper = new DatabaseHelper(requireContext());
         recyclerView = view.findViewById(R.id.classRecyclerView);
@@ -80,7 +80,8 @@ public class ClassFragment extends Fragment {
                 do {
                     String username = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USERNAME));
                     String description = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION));
-                    studentList.add(new Student(username, description));
+                    int experiencePoints = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_EXPERIENCE_POINTS));
+                    studentList.add(new Student(username, description, experiencePoints));
                 }
                 while(cursor.moveToNext());
                 cursor.close();
