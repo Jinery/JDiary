@@ -29,5 +29,8 @@
     <string name="nav_input_title">Название заметки</string>
     <string name="nav_input_content">Текст заметки</string>
 
+    <!--  Profile.  -->
+    <string name="my_achievements_text">Достижения</string>
+
 
 </resources>

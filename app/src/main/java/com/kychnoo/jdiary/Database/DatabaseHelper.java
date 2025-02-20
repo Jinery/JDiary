@@ -92,7 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_ACHIEVEMENTS = "achievements";
     public static final String COLUMN_ACHIEVEMENT_ID = "achievement_id";
     public static final String COLUMN_ACHIEVEMENT_TITLE = "achievement_title";
-    public static final String COLUMN_ACHIEVEMENT_DESCRIPTION = "achievement_description";
+    public static final String COLUMN_ACHIEVEMENT_CONTENT = "achievement_content";
 
     //User Achievements.
     public static final String TABLE_USER_ACHIEVEMENTS = "user_achievements";
@@ -177,6 +177,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_NOTE_DATE + " TEXT NOT NULL, " +
                 "FOREIGN KEY (" + COLUMN_NOTE_USER_PHONE + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_PHONE + "))";
 
+        String createAchievementsTable = "CREATE TABLE " + TABLE_ACHIEVEMENTS + " (" +
+                COLUMN_ACHIEVEMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_ACHIEVEMENT_TITLE + " TEXT NOT NULL, " +
+                COLUMN_ACHIEVEMENT_CONTENT + " TEXT NOT NULL)";
+
+        String createUserAchievementsTable = "CREATE TABLE " + TABLE_USER_ACHIEVEMENTS + " (" +
+                COLUMN_USER_ACHIEVEMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_USER_ACHIEVEMENT_USER_PHONE + " TEXT NOT NULL, " +
+                COLUMN_USER_ACHIEVEMENT_ACHIEVEMENT_ID + " INTEGER NOT NULL, " +
+                "FOREIGN KEY (" + COLUMN_USER_ACHIEVEMENT_USER_PHONE + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_PHONE + "), " +
+                "FOREIGN KEY (" + COLUMN_USER_ACHIEVEMENT_ACHIEVEMENT_ID + ") REFERENCES " + TABLE_ACHIEVEMENTS + "(" + COLUMN_ACHIEVEMENT_ID + "))";
+
         database.execSQL(createUsersTable);
         database.execSQL(createClassesTable);
         database.execSQL(createTestsTable);
@@ -187,6 +199,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(createScheduleTable);
         database.execSQL(createLessonsTable);
         database.execSQL(createNotesTable);
+        database.execSQL(createAchievementsTable);
+        database.execSQL(createUserAchievementsTable);
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_CLASS_NAME, "5А");
@@ -209,6 +223,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_SCHEDULE);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_LESSONS);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTES);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_ACHIEVEMENTS);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_ACHIEVEMENTS);
         onCreate(database);
     }
 
@@ -589,5 +605,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null,
                 COLUMN_NOTE_DATE + " DESC"
         );
+    }
+
+    //Achievement works Methods.
+    public long addAchievement(String title, String content) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ACHIEVEMENT_TITLE, title);
+        values.put(COLUMN_ACHIEVEMENT_CONTENT, content);
+        return database.insert(TABLE_ACHIEVEMENTS, null, values);
+    }
+
+    public Cursor getUserAchievements(String userPhone) {
+        SQLiteDatabase database = this.getReadableDatabase();
+        String query = "SELECT a." + COLUMN_ACHIEVEMENT_ID + ", a." + COLUMN_ACHIEVEMENT_TITLE + ", a." + COLUMN_ACHIEVEMENT_CONTENT +
+                " FROM " + TABLE_ACHIEVEMENTS + " a " +
+                "JOIN " + TABLE_USER_ACHIEVEMENTS + " ua ON a." + COLUMN_ACHIEVEMENT_ID + " = ua." + COLUMN_USER_ACHIEVEMENT_ACHIEVEMENT_ID +
+                " WHERE ua." + COLUMN_USER_ACHIEVEMENT_USER_PHONE + " = ?";
+        return database.rawQuery(query, new String[] { userPhone });
+    }
+
+    public long addUserAchievement(String userPhone, long achievementId) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USER_ACHIEVEMENT_USER_PHONE, userPhone);
+        values.put(COLUMN_USER_ACHIEVEMENT_ACHIEVEMENT_ID, achievementId);
+        return database.insert(TABLE_USER_ACHIEVEMENTS, null, values);
+    }
+
+    public boolean isAchievementExistsByName(String achievementTitle) {
+        SQLiteDatabase database = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_ACHIEVEMENTS +
+                " WHERE " + COLUMN_ACHIEVEMENT_TITLE + " =?";
+        Cursor cursor = database.rawQuery(query, new String[]{achievementTitle});
+        boolean exists = cursor.moveToFirst();
+        cursor.close();
+        return exists;
+    }
+
+    public boolean isUserHasAchievement(String userPhone, long achievementId) {
+        SQLiteDatabase database = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_USER_ACHIEVEMENTS +
+                " WHERE " + COLUMN_USER_ACHIEVEMENT_USER_PHONE + " =? AND " + COLUMN_USER_ACHIEVEMENT_ACHIEVEMENT_ID + " =?";
+        Cursor cursor = database.rawQuery(query, new String[]{userPhone, String.valueOf(achievementId)});
+        boolean hasAchievement = cursor.moveToFirst();
+        cursor.close();
+        return hasAchievement;
     }
 }

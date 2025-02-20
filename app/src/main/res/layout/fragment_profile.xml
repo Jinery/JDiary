@@ -65,4 +65,20 @@
         </LinearLayout>
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/my_achievements_text"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:paddingTop="2dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAchievements"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="4dp"/>
+
 </LinearLayout>

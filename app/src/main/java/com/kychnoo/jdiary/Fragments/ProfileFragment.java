@@ -17,10 +17,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.kychnoo.jdiary.Adapters.AchievementsAdapter;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
 import com.kychnoo.jdiary.Interfaces.ToolbarTitleSetter;
+import com.kychnoo.jdiary.OtherClasses.Achievement;
 import com.kychnoo.jdiary.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
@@ -32,6 +39,12 @@ public class ProfileFragment extends Fragment {
     private TextView tvUserPoints;
 
     private ToolbarTitleSetter toolbarTitleSetter;
+
+    private RecyclerView rvAchievements;
+
+    private AchievementsAdapter achievementsAdapter;
+
+    private List<Achievement> achievementsList;
 
 
     @Override
@@ -63,6 +76,14 @@ public class ProfileFragment extends Fragment {
         tvDescription = view.findViewById(R.id.tvUserDescription);
         tvUserPoints = view.findViewById(R.id.tvUserPoints);
 
+        rvAchievements = view.findViewById(R.id.rvAchievements);
+        rvAchievements.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        achievementsList = new ArrayList<>();
+
+        achievementsAdapter = new AchievementsAdapter(achievementsList);
+        rvAchievements.setAdapter(achievementsAdapter);
+
         tvDescription.setOnClickListener(v -> showEditDesriptionVindow(phone));
 
         Cursor cursor = databaseHelper.getUserByPhone(phone);
@@ -79,6 +100,8 @@ public class ProfileFragment extends Fragment {
         } else {
             Toast.makeText(requireContext(), "Пользователь не найден", Toast.LENGTH_SHORT).show();
         }
+
+        loadAchievements();
 
         return view;
     }
@@ -142,5 +165,18 @@ public class ProfileFragment extends Fragment {
             tvDescription.setText("Описание отсутствует.");
         else
             tvDescription.setText(newDescription);
+    }
+
+    private void loadAchievements() {
+        Cursor cursor = databaseHelper.getUserAchievements(phone);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ACHIEVEMENT_ID));
+                String title = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ACHIEVEMENT_TITLE));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ACHIEVEMENT_CONTENT));
+                achievementsList.add(new Achievement(id, title, description));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
     }
 }

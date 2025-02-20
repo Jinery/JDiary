@@ -18,6 +18,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
+import com.kychnoo.jdiary.Achievements.AchievementsHelper;
+import com.kychnoo.jdiary.Adapters.AchievementsAdapter;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
 import com.kychnoo.jdiary.Fragments.ClassFragment;
 import com.kychnoo.jdiary.Fragments.DiaryFragment;
@@ -143,6 +145,8 @@ public class MainActivity extends AppCompatActivity implements ToolbarTitleSette
             databaseHelper.addLesson(scheduleId, "История", "Параграф 15");
         }
 
+        AchievementsHelper.initialize(this);
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -161,6 +165,8 @@ public class MainActivity extends AppCompatActivity implements ToolbarTitleSette
         } else {
             Toast.makeText(MainActivity.this, "Пользователь не найден", Toast.LENGTH_SHORT).show();
         }
+
+        AchievementsHelper.startApp(phone);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

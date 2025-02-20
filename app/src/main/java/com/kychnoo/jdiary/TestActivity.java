@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.kychnoo.jdiary.Achievements.AchievementsHelper;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
 import com.kychnoo.jdiary.OtherClasses.Answer;
 import com.kychnoo.jdiary.OtherClasses.Question;
@@ -143,6 +144,8 @@ public class TestActivity extends AppCompatActivity {
 
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         databaseHelper.addGrade(userPhone, exitText, currentDate, score);
+
+        AchievementsHelper.passedTest(userPhone);
 
         Toast.makeText(this, "Тест завершен! Вы набрали " + experiencePoints + " баллов.", Toast.LENGTH_LONG).show();
         finish();
