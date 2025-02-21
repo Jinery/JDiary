@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -34,6 +35,8 @@ public class TestActivity extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
 
     private List<Question> questionList;
+
+    private ProgressBar pbProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +94,10 @@ public class TestActivity extends AppCompatActivity {
             TextView tvQuestion = findViewById(R.id.tvQuestion);
             RadioGroup rgAnswers = findViewById(R.id.rgAnswers);
             Button btnNext = findViewById(R.id.btnNext);
+            pbProgress = findViewById(R.id.pbProgress);
+
+            pbProgress.setMax(questionList.size());
+            pbProgress.setProgress(currentQuestionIndex);
 
             tvQuestion.setText(question.getText());
             rgAnswers.removeAllViews();

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:background="#B2A5DB">
 
     <Spinner
         android:id="@+id/spinnerClasses"
@@ -13,12 +15,17 @@
         android:minHeight="48dp"
         android:paddingTop="12dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnChooseClasses"
         android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/button_select_class"/>
+        android:text="@string/button_select_class"
+        app:cornerRadius="8dp"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/light_blue"/>
 
 </LinearLayout>

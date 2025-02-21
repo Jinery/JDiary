@@ -29,20 +29,24 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
 
         <ImageView
             android:id="@+id/ivEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher_background"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/redact"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="5dp"
             android:contentDescription="Edit Note"/>
 
         <ImageView
             android:id="@+id/ivDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher_foreground"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="5dp"
+            android:src="@drawable/crash"
             android:contentDescription="Delete Note"/>
     </LinearLayout>
 

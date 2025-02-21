@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#A0A0F0">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:padding="16dp"
-        android:background="@color/black"
+        android:background="@color/light_blue"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/user_icon"
-            android:scaleType="fitCenter"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/user_icon"
+                android:scaleType="fitCenter"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -30,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Null"
-                    android:textColor="@color/white"
+                    android:textColor="@android:color/white"
                     android:textSize="24sp"
                     android:maxLines="1"
                     android:ellipsize="end"/>
@@ -40,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:text="class"
                     android:textSize="16sp"
-                    android:textColor="@color/white"
+                    android:textColor="@android:color/white"
                     android:maxLines="1"
                     android:ellipsize="end"/>
                 <TextView
@@ -49,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:text="Description"
                     android:textSize="16sp"
-                    android:textColor="@color/white"
+                    android:textColor="@android:color/white"
                     android:maxLines="3"
                     android:ellipsize="end"/>
                 <TextView
@@ -58,10 +60,10 @@
                     android:layout_height="wrap_content"
                     android:text="Points"
                     android:textSize="14sp"
-                    android:textColor="@color/white"
+                    android:textColor="@android:color/white"
                     android:maxLines="1"
                     android:ellipsize="end"/>
-                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -72,13 +74,15 @@
         android:text="@string/my_achievements_text"
         android:textStyle="bold"
         android:textSize="22sp"
-        android:paddingTop="2dp"/>
+        android:paddingTop="16dp"
+        android:textColor="#212121"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAchievements"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="4dp"/>
+        android:padding="8dp"
+        android:clipToPadding="false"/>
 
 </LinearLayout>

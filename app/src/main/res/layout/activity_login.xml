@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="#A0A0F0">
 
     <EditText
         android:id="@+id/etPhone"
@@ -21,17 +22,29 @@
         android:hint="@string/edit_text_password"
         android:inputType="textPassword"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
         android:layout_gravity="center_horizontal"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Вход"
+        app:cornerRadius="8dp"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/light_blue"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnGoToRegister"
-        android:layout_width="120dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:text="Зарегистрироваться"/>
+        android:text="Регистрация"
+        app:cornerRadius="8dp"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/light_blue"/>
+
 </LinearLayout>

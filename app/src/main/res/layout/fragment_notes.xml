@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="3dp">
+    android:padding="16dp"
+    android:background="#A0A0F0">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNotes"
@@ -11,13 +13,17 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddNote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:text="@string/add_note_text"
         android:textStyle="bold"
-        android:padding="4dp"/>
+        android:padding="12dp"
+        app:cornerRadius="8dp"
+        app:backgroundTint="@color/light_blue"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"/>
 
 </LinearLayout>

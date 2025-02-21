@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:background="#A0A0F0">
 
     <TextView
         android:id="@+id/tvAvialableSymvols"

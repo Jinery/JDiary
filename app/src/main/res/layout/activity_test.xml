@@ -7,7 +7,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TestActivity"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:background="#A0A0F0">
+
+    <ProgressBar
+        android:id="@+id/pbProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:max="100"
+        android:padding="7dp"
+        android:progress="0" />
 
     <TextView
         android:id="@+id/tvQuestion"
@@ -25,12 +35,17 @@
         android:layout_below="@id/tvQuestion"
         android:layout_marginBottom="16dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnNext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Далее"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        app:cornerRadius="8dp"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/light_blue"/>
 
 </RelativeLayout>
