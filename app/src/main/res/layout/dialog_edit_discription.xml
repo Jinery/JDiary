@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:background="#A0A0F0">
+    android:background="@color/whitesmoke">
 
     <TextView
         android:id="@+id/tvAvialableSymvols"
@@ -17,8 +17,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
+        android:padding="6sp"
+        android:textColor="@color/softblack"
+        android:textColorHint="@color/gray"
         android:hint="Введите описание"
-        android:inputType="textImeMultiLine"/>
+        android:layout_marginTop="6dp"
+        android:inputType="textImeMultiLine"
+        android:background="@drawable/rounded_edit_text"/>
 
 
 </LinearLayout>

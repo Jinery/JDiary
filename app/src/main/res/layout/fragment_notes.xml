@@ -4,8 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#A0A0F0">
+    android:padding="4dp"
+    android:background="@color/whitesmoke">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNotes"
@@ -21,6 +21,7 @@
         android:text="@string/add_note_text"
         android:textStyle="bold"
         android:padding="12dp"
+        android:layout_margin="6dp"
         app:cornerRadius="8dp"
         app:backgroundTint="@color/light_blue"
         android:textColor="@android:color/white"

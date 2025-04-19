@@ -1,13 +1,25 @@
 <resources>
     <string name="app_name">JDiary</string>
 
-    <!--  Register_Activity.  -->
+    <!--  Register & Login Activities.  -->
+    <string name="welcome_register_text">Добро пожаловать.\nЗарегистрируйтесь в системе</string>
+    <string name="welcome_login_text">Добро пожаловать.\nВойдите в систему</string>
+
     <string name="edit_text_username">Юзернейм</string>
     <string name="edit_text_phone_number">Номер телефона</string>
     <string name="edit_text_mail">Электронная почта</string>
     <string name="edit_text_password">Пароль</string>
     <string name="edit_text_accept_password">Подтвердите пароль</string>
     <string name="button_select_class">Выбрать класс</string>
+
+    <string name="button_register">Регистрация</string>
+    <string name="button_enter">Вход</string>
+
+    <string name="no_account_text">Нету аккаунта?</string>
+    <string name="has_account_text">Уже есть аккаунт?</string>
+
+    <string name="button_no_account_enter">Зарегистрироваться</string>
+    <string name="button_has_account_enter">Войти</string>
 
     <!--  Navigation Drawler.-->
     <string name="navigation_drawer_open">Открыть навигацию</string>

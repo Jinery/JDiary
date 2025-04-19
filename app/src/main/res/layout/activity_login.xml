@@ -6,21 +6,39 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical"
     android:padding="16dp"
-    android:background="#A0A0F0">
+    android:background="@color/whitesmoke">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20sp"
+        android:text="@string/welcome_login_text"
+        android:padding="12dp"
+        android:layout_marginBottom="6dp"/>
 
     <EditText
         android:id="@+id/etPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="6dp"
+        android:layout_marginBottom="6dp"
+        android:textColor="@color/softblack"
+        android:textColorHint="@color/gray"
         android:hint="@string/edit_text_phone_number"
-        android:inputType="phone"/>
+        android:inputType="phone"
+        android:background="@drawable/rounded_edit_text"/>
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="6dp"
+        android:textColor="@color/softblack"
+        android:textColorHint="@color/gray"
         android:hint="@string/edit_text_password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:background="@drawable/rounded_edit_text"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
@@ -32,15 +50,25 @@
         android:padding="12dp"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:layout_marginTop="6dp"
         app:backgroundTint="@color/light_blue"/>
+
+    <TextView
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:textSize="18sp"
+        android:layout_marginTop="18dp"
+        android:text="@string/no_account_text"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnGoToRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:text="Регистрация"
+        android:layout_marginTop="6dp"
+        android:text="@string/button_no_account_enter"
         app:cornerRadius="8dp"
         android:padding="12dp"
         android:textSize="16sp"
