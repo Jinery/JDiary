@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kychnoo.jdiary.Adapters.AchievementsAdapter;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
 import com.kychnoo.jdiary.Interfaces.ToolbarTitleSetter;
+import com.kychnoo.jdiary.Notifications.NotificationHelper;
 import com.kychnoo.jdiary.OtherClasses.Achievement;
 import com.kychnoo.jdiary.R;
 
@@ -81,7 +83,7 @@ public class ProfileFragment extends Fragment {
 
         achievementsList = new ArrayList<>();
 
-        achievementsAdapter = new AchievementsAdapter(achievementsList);
+        achievementsAdapter = new AchievementsAdapter(achievementsList, requireContext());
         rvAchievements.setAdapter(achievementsAdapter);
 
         tvDescription.setOnClickListener(v -> showEditDesriptionVindow(phone));
@@ -98,7 +100,7 @@ public class ProfileFragment extends Fragment {
             updateUserDescription(userDescription);
             cursor.close();
         } else {
-            Toast.makeText(requireContext(), "Пользователь не найден", Toast.LENGTH_SHORT).show();
+            NotificationHelper.show(requireActivity(), "Пользователь не найден", NotificationHelper.NotificationColor.ERROR, 1000);
         }
 
         loadAchievements();
@@ -151,7 +153,7 @@ public class ProfileFragment extends Fragment {
         }
         else
         {
-            Toast.makeText(requireContext(), "Не удаётся загрузить данные об описании.", Toast.LENGTH_SHORT).show();
+            NotificationHelper.show(requireActivity(), "Не удаётся загрузить данные об описании", NotificationHelper.NotificationColor.WARNING, 1000);
         }
     }
 
@@ -161,7 +163,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateUserDescription(String newDescription) {
-        if(newDescription == null || newDescription.isEmpty())
+        if(TextUtils.isEmpty(newDescription))
             tvDescription.setText("Описание отсутствует.");
         else
             tvDescription.setText(newDescription);
@@ -173,8 +175,12 @@ public class ProfileFragment extends Fragment {
             do {
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ACHIEVEMENT_ID));
                 String title = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ACHIEVEMENT_TITLE));
-                String description = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ACHIEVEMENT_CONTENT));
-                achievementsList.add(new Achievement(id, title, description));
+                String content = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ACHIEVEMENT_CONTENT));
+                String iconResName = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ACHIEVEMENT_ICON));
+                int rarity = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ACHIEVEMENT_RARITY));
+
+                int iconResId = requireContext().getResources().getIdentifier(iconResName, "drawable", requireContext().getPackageName());
+                achievementsList.add(new Achievement(id, title, content, iconResId, rarity));
             } while (cursor.moveToNext());
             cursor.close();
         }

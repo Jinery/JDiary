@@ -11,6 +11,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kychnoo.jdiary.Database.DatabaseHelper;
+import com.kychnoo.jdiary.Notifications.NotificationHelper;
 
 public class ScheduleDetailActivity extends AppCompatActivity {
 
@@ -31,7 +32,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         if (scheduleId != -1) {
             loadScheduleDetails(scheduleId);
         } else {
-            Toast.makeText(this, "Расписание не найдено.", Toast.LENGTH_SHORT).show();
+            NotificationHelper.show(this, "Расписание не найдено", NotificationHelper.NotificationColor.ERROR, 2000);
             finish();
         }
 

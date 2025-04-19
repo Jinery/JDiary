@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:gravity="center_vertical"
-    android:background="@color/whitesmoke">
+    android:background="@color/white_smoke">
 
     <Spinner
         android:id="@+id/spinnerClasses"

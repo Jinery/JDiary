@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kychnoo.jdiary.Database.DatabaseHelper;
+import com.kychnoo.jdiary.Notifications.NotificationHelper;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -52,34 +53,34 @@ public class RegisterActivity extends AppCompatActivity {
                 String acceptPassword = etAcceptPassword.getText().toString();
 
                 if(username.trim().isEmpty() || phoneNumber.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty() || acceptPassword.trim().isEmpty()) {
-                    Toast.makeText(RegisterActivity.this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+                    NotificationHelper.show(RegisterActivity.this, "Заполните все поля", NotificationHelper.NotificationColor.INFO, 1000);
                     return;
                 }
 
                 if (!phoneNumber.trim().matches("\\d+")) {
-                    Toast.makeText(RegisterActivity.this, "Номер телефона должен содержать только цифры", Toast.LENGTH_SHORT).show();
+                    NotificationHelper.show(RegisterActivity.this, "Номер телефона должен содержать только цифры", NotificationHelper.NotificationColor.INFO, 1000);
                     return;
                 }
 
                 if (!email.trim().matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
-                    Toast.makeText(RegisterActivity.this, "Введите корректный адрес электронной почты", Toast.LENGTH_SHORT).show();
+                    NotificationHelper.show(RegisterActivity.this, "Введите корректный адрес электронной почты", NotificationHelper.NotificationColor.INFO, 1000);
                     return;
                 }
 
                 if(!password.equals(acceptPassword)) {
-                    Toast.makeText(RegisterActivity.this, "Пароли не совпадают", Toast.LENGTH_SHORT).show();
+                    NotificationHelper.show(RegisterActivity.this, "Пароли не совпадают", NotificationHelper.NotificationColor.WARNING, 1000);
                     return;
                 }
 
                 Cursor cursor = databaseHelper.getUserByUsername(username);
                 if (cursor != null && cursor.getCount() > 0) {
-                    Toast.makeText(RegisterActivity.this, "Юзернейм уже занят", Toast.LENGTH_SHORT).show();
+                    NotificationHelper.show(RegisterActivity.this, "Данный юзернейм занят", NotificationHelper.NotificationColor.ERROR, 1000);
                     cursor.close();
                     return;
                 }
                 cursor = databaseHelper.getUserByPhone(phoneNumber);
                 if(cursor != null && cursor.getCount() > 0) {
-                    Toast.makeText(RegisterActivity.this, "Номер уже занят", Toast.LENGTH_SHORT).show();
+                    NotificationHelper.show(RegisterActivity.this, "Данный номер занят", NotificationHelper.NotificationColor.ERROR, 1000);
                     cursor.close();
                     return;
                 }
@@ -90,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 long result = databaseHelper.addUser(phoneNumber, email, password, username);
                 if(result != -1) {
-                    Toast.makeText(RegisterActivity.this, "Регистрация прошла успешно", Toast.LENGTH_SHORT).show();
+                    NotificationHelper.show(RegisterActivity.this, "Регистрация прошла успешно", NotificationHelper.NotificationColor.SUCCESS, 1000);
                     Intent intent = new Intent(RegisterActivity.this, ChooseClassActivity.class);
                     intent.putExtra("phone", phoneNumber);
                     startActivity(intent);
@@ -98,7 +99,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Toast.makeText(RegisterActivity.this, "Ошибка при регистрации", Toast.LENGTH_SHORT).show();
+                    NotificationHelper.show(RegisterActivity.this, "Ошибка при регистрации.", NotificationHelper.NotificationColor.ERROR, 1000);
                 }
             }
         });

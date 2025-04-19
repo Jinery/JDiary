@@ -1,14 +1,26 @@
 package com.kychnoo.jdiary.OtherClasses;
 
+import android.content.Context;
+import android.content.res.Resources;
+
 public class Achievement {
+    public static final int RARITY_BRONZE = 0;
+    public static final int RARITY_SILVER = 1;
+    public static final int RARITY_GOLD = 2;
+
     private long id;
     private String title;
     private String content;
+    private int iconResId;
+    private int rarity;
 
-    public Achievement(long id, String title, String content) {
+
+    public Achievement(long id, String title, String content, int iconResId, int rarity) {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.iconResId = iconResId;
+        this.rarity = rarity;
     }
 
     public long getId() {
@@ -21,5 +33,22 @@ public class Achievement {
 
     public String getContent() {
         return content;
+    }
+
+
+    public int getRarity() {
+        return rarity;
+    }
+
+    public int getIconResId() {
+        return iconResId;
+    }
+
+    public String getIconResName(Context context) {
+        try {
+            return context.getResources().getResourceEntryName(this.iconResId);
+        } catch (Resources.NotFoundException e) {
+            return "ic_trophy_bronze";
+        }
     }
 }

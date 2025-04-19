@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="3dp"
-    android:background="@color/whitesmoke">
+    android:background="@color/white_smoke">
 
     <TextView
         android:id="@+id/tvScheduleDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/softblack"
+        android:textColor="@color/soft_black"
         android:textSize="18sp"
         android:textStyle="bold"/>
 

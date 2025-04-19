@@ -1,5 +1,6 @@
 package com.kychnoo.jdiary;
 
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.kychnoo.jdiary.Achievements.AchievementsHelper;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
+import com.kychnoo.jdiary.Notifications.NotificationHelper;
 import com.kychnoo.jdiary.OtherClasses.Answer;
 import com.kychnoo.jdiary.OtherClasses.Question;
 
@@ -96,8 +98,25 @@ public class TestActivity extends AppCompatActivity {
             Button btnNext = findViewById(R.id.btnNext);
             pbProgress = findViewById(R.id.pbProgress);
 
-            pbProgress.setMax(questionList.size());
-            pbProgress.setProgress(currentQuestionIndex);
+            pbProgress.setMax(questionList.size() * 10);
+
+            new Thread(() -> {
+                for(int pg = pbProgress.getProgress(); pg < currentQuestionIndex * 10; pg++) {
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    int finalPg = pg;
+                    runOnUiThread(() -> {
+                        pbProgress.setProgress(finalPg);
+                    });
+                }
+                runOnUiThread(() -> {
+                    pbProgress.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.light_blue)));
+                });
+            }).start();
 
             tvQuestion.setText(question.getText());
             rgAnswers.removeAllViews();
@@ -111,7 +130,7 @@ public class TestActivity extends AppCompatActivity {
 
             btnNext.setOnClickListener(v -> {
                 if (rgAnswers.getCheckedRadioButtonId() == -1) {
-                    Toast.makeText(this, "Выберите ответ", Toast.LENGTH_SHORT).show();
+                    NotificationHelper.show(this, "Выберите ответ", NotificationHelper.NotificationColor.WARNING, 1000);
                     return;
                 }
 
@@ -121,7 +140,14 @@ public class TestActivity extends AppCompatActivity {
                 for (Answer answer : question.getAnswers()) {
                     if (answer.getText().equals(selectedAnswerText)) {
                         if (answer.isCorrect()) {
+                            runOnUiThread(() -> {
+                                pbProgress.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+                            });
                             correctAnswersCount++;
+                        } else {
+                            runOnUiThread(() -> {
+                                pbProgress.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.red)));
+                            });
                         }
                         break;
                     }
@@ -154,7 +180,7 @@ public class TestActivity extends AppCompatActivity {
 
         AchievementsHelper.passedTest(userPhone);
 
-        Toast.makeText(this, "Тест завершен! Вы набрали " + experiencePoints + " баллов.", Toast.LENGTH_LONG).show();
+        NotificationHelper.show(this, "Тест завершен! Вы набрали " + experiencePoints + " баллов.", NotificationHelper.NotificationColor.INFO, 1000);
         finish();
     }
 

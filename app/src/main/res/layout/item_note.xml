@@ -1,55 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/whitesmoke"
-    android:padding="3dp">
+    android:layout_margin="2dp"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:ignore="Suspicious0dp">
+        android:padding="12dp">
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/softblack"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/soft_black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:ellipsize="end"
+                android:maxLines="1"/>
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/dimgray"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/dimgray"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:gravity="end">
+
+            <ImageView
+                android:id="@+id/ivEdit"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/redact"
+                android:layout_marginEnd="4dp"
+                android:contentDescription="Edit Note"/>
+
+            <ImageView
+                android:id="@+id/ivDelete"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/crash"
+                android:contentDescription="Delete Note"/>
+        </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp">
-
-        <ImageView
-            android:id="@+id/ivEdit"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/redact"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="5dp"
-            android:contentDescription="Edit Note"/>
-
-        <ImageView
-            android:id="@+id/ivDelete"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="5dp"
-            android:src="@drawable/crash"
-            android:contentDescription="Delete Note"/>
-    </LinearLayout>
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

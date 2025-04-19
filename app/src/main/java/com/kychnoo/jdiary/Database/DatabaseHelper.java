@@ -1,5 +1,7 @@
 package com.kychnoo.jdiary.Database;
 
+import static androidx.core.content.res.TypedArrayUtils.getResourceId;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -7,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import com.kychnoo.jdiary.OtherClasses.Achievement;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -93,6 +97,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ACHIEVEMENT_ID = "achievement_id";
     public static final String COLUMN_ACHIEVEMENT_TITLE = "achievement_title";
     public static final String COLUMN_ACHIEVEMENT_CONTENT = "achievement_content";
+    public static final String COLUMN_ACHIEVEMENT_ICON = "achievement_icon_res";
+    public static final String COLUMN_ACHIEVEMENT_RARITY = "achievement_rarity";
 
     //User Achievements.
     public static final String TABLE_USER_ACHIEVEMENTS = "user_achievements";
@@ -100,8 +106,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_USER_ACHIEVEMENT_USER_PHONE = "user_phone";
     public static final String COLUMN_USER_ACHIEVEMENT_ACHIEVEMENT_ID = "achievement_id";
 
+    private final Context context;
+
     public DatabaseHelper(@Nullable Context context) {
         super(context, databaseName, null, databaseVersion);
+        this.context = context;
     }
 
     @Override
@@ -180,7 +189,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createAchievementsTable = "CREATE TABLE " + TABLE_ACHIEVEMENTS + " (" +
                 COLUMN_ACHIEVEMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_ACHIEVEMENT_TITLE + " TEXT NOT NULL, " +
-                COLUMN_ACHIEVEMENT_CONTENT + " TEXT NOT NULL)";
+                COLUMN_ACHIEVEMENT_CONTENT + " TEXT NOT NULL, " +
+                COLUMN_ACHIEVEMENT_ICON + " TEXT DEFAULT 'ic_trophy_bronze', " +
+                COLUMN_ACHIEVEMENT_RARITY + " INTEGER DEFAULT 0)";
 
         String createUserAchievementsTable = "CREATE TABLE " + TABLE_USER_ACHIEVEMENTS + " (" +
                 COLUMN_USER_ACHIEVEMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -608,17 +619,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Achievement works Methods.
-    public long addAchievement(String title, String content) {
+    public long addAchievement(String title, String content, String iconResName, int rarity) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_ACHIEVEMENT_TITLE, title);
         values.put(COLUMN_ACHIEVEMENT_CONTENT, content);
+        values.put(COLUMN_ACHIEVEMENT_ICON, iconResName);
+        values.put(COLUMN_ACHIEVEMENT_RARITY, rarity);
         return database.insert(TABLE_ACHIEVEMENTS, null, values);
     }
 
     public Cursor getUserAchievements(String userPhone) {
         SQLiteDatabase database = this.getReadableDatabase();
-        String query = "SELECT a." + COLUMN_ACHIEVEMENT_ID + ", a." + COLUMN_ACHIEVEMENT_TITLE + ", a." + COLUMN_ACHIEVEMENT_CONTENT +
+        String query = "SELECT a." + COLUMN_ACHIEVEMENT_ID + ", a." + COLUMN_ACHIEVEMENT_TITLE + ", a." + COLUMN_ACHIEVEMENT_CONTENT + ", a." + COLUMN_ACHIEVEMENT_ICON + ", a." + COLUMN_ACHIEVEMENT_RARITY +
                 " FROM " + TABLE_ACHIEVEMENTS + " a " +
                 "JOIN " + TABLE_USER_ACHIEVEMENTS + " ua ON a." + COLUMN_ACHIEVEMENT_ID + " = ua." + COLUMN_USER_ACHIEVEMENT_ACHIEVEMENT_ID +
                 " WHERE ua." + COLUMN_USER_ACHIEVEMENT_USER_PHONE + " = ?";

@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    android:background="@color/whitesmoke">
+    android:background="@color/white_smoke">
 
     <TextView
         android:id="@+id/tvGradeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/softblack"
+        android:textColor="@color/soft_black"
         android:textSize="16sp"
         android:textStyle="bold"/>
 
@@ -18,14 +18,14 @@
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/softblack"
+        android:textColor="@color/soft_black"
         android:textSize="16sp"/>
     
     <TextView
         android:id="@+id/tvScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/softblack"
+        android:textColor="@color/soft_black"
         android:textSize="14sp"
         android:layout_marginTop="4dp"/>
 

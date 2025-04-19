@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="4dp"
-    android:background="@color/whitesmoke">
+    android:background="@color/white_smoke">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNotes"

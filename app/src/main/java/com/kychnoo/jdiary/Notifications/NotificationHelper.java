@@ -3,86 +3,63 @@ package com.kychnoo.jdiary.Notifications;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.graphics.drawable.ColorDrawable;
+import android.text.TextUtils;
 import android.view.View;
-import android.os.Handler;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
+
+import com.google.android.material.snackbar.Snackbar;
 import com.kychnoo.jdiary.R;
 
 public class NotificationHelper {
 
-    private final static int NOTIFICATION_DURATION_TIME = 5000;
-    private static final String NOTIFICATION_TAG = "main_notification";
-
     public enum NotificationColor {
-        SUCCESS(Color.GREEN),
-        ERROR(Color.RED),
-        WARNING(Color.YELLOW);
+        SUCCESS(R.color.successNotification),
+        ERROR(R.color.errorNotification),
+        WARNING(R.color.warningNotification),
+        INFO(R.color.infoNotification);
 
-        private final int color;
+        private final int colorResId;
 
-        NotificationColor(int color) {
-            this.color = color;
+        NotificationColor(int colorResId) {
+            this.colorResId = colorResId;
         }
 
-        public  int getColor() {
-            return color;
+        public int getColorResId() {
+            return colorResId;
+        }
+
+        public ColorDrawable getColorDrawable(Context context) {
+            int resolvedColor = ContextCompat.getColor(context, colorResId);
+            return new ColorDrawable(resolvedColor);
         }
     }
 
-    private static View notificationView;
-    private static WindowManager windowManager;
-    private static WindowManager.LayoutParams params;
+    public static void show(Activity activity, String message, NotificationColor color, int duration) {
 
-    public static void showNotification(Context context, String text, NotificationColor color) {
-        if (!(context instanceof Activity)) {
-            return;
+        if(activity == null || activity.isFinishing()) return;
+        if(TextUtils.isEmpty(message)) return;
+
+        View rootView = activity.getWindow().getDecorView().findViewById(android.R.id.content);
+
+        Snackbar snackbar = Snackbar.make(rootView, message, Snackbar.LENGTH_INDEFINITE);
+
+        snackbar.setBackgroundTint(ContextCompat.getColor(activity, color.getColorResId()));
+
+        if(color == NotificationColor.SUCCESS || color == NotificationColor.ERROR) {
+            snackbar.setTextColor(Color.WHITE);
+        } else {
+            snackbar.setTextColor(Color.BLACK);
+        }
+        snackbar.setTextMaxLines(3);
+
+        if (duration > 0) {
+            snackbar.setDuration(duration);
         }
 
-        Activity activity = (Activity) context;
-
-        if (windowManager == null) {
-            windowManager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
-        }
-
-        if (notificationView != null) {
-            windowManager.removeView(notificationView);
-        }
-
-        LayoutInflater inflater = activity.getLayoutInflater();
-        notificationView = inflater.inflate(R.layout.notification_layout, null);
-        TextView textView = notificationView.findViewById(R.id.notification_text);
-        FrameLayout container = notificationView.findViewById(R.id.notification_container);
-
-        textView.setText(text);
-        container.setBackgroundColor(color.getColor());
-
-        params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                android.graphics.PixelFormat.TRANSLUCENT
-        );
-
-        params.gravity = Gravity.BOTTOM;
-        params.y = 100;
-
-        windowManager.addView(notificationView, params);
-
-        notificationView.setTranslationY(notificationView.getHeight());
-        notificationView.animate().translationY(0).setDuration(300).start();
-
-        new Handler().postDelayed(() -> {
-            notificationView.animate().translationY(notificationView.getHeight()).setDuration(300).withEndAction(() -> {
-                windowManager.removeView(notificationView);
-                notificationView = null;
-            }).start();
-        }, NOTIFICATION_DURATION_TIME);
+        snackbar.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE);
+        snackbar.show();
     }
-
 }

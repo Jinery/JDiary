@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kychnoo.jdiary.Adapters.TestsAdapter;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
 import com.kychnoo.jdiary.Interfaces.ToolbarTitleSetter;
+import com.kychnoo.jdiary.Notifications.NotificationHelper;
 import com.kychnoo.jdiary.OtherClasses.Test;
 import com.kychnoo.jdiary.R;
 import com.kychnoo.jdiary.TestActivity;
@@ -99,7 +100,7 @@ public class TestsFragment extends Fragment implements TestsAdapter.OnTestClickL
     @Override
     public void onTestClick(Test test) {
         if(databaseHelper.hasUserPassedTest(phone, test.getId())) {
-            Toast.makeText(requireContext(), "Вы уже выполнили этот тест", Toast.LENGTH_SHORT).show();
+            NotificationHelper.show(requireActivity(), "Вы уже выполнили этот тест", NotificationHelper.NotificationColor.INFO, 1000);
         }
         else
         {

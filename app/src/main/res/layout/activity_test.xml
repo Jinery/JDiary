@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".TestActivity"
     android:padding="10dp"
-    android:background="@color/whitesmoke">
+    android:background="@color/white_smoke">
 
     <ProgressBar
         android:id="@+id/pbProgress"
@@ -16,8 +16,10 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:max="100"
-        android:padding="7dp"
-        android:progress="0" />
+        android:layout_marginTop="8dp"
+        android:padding="5dp"
+        android:progressDrawable="@drawable/rounded_progress_bar"
+        android:progress="0"/>
 
     <TextView
         android:id="@+id/tvQuestion"
@@ -25,8 +27,8 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="16dp" />
+        android:layout_below="@+id/pbProgress"
+        android:layout_marginBottom="16dp"/>
 
     <RadioGroup
         android:id="@+id/rgAnswers"

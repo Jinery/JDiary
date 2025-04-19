@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/whitesmoke"
+    android:background="@color/white_smoke"
     android:padding="16dp">
 
     <TextView
@@ -23,7 +23,7 @@
         android:inputType="text"
         android:layout_marginTop="8dp"
         android:padding="12dp"
-        android:textColor="@color/softblack"
+        android:textColor="@color/soft_black"
         android:textColorHint="@color/gray"
         android:background="@drawable/rounded_edit_text"/>
 
@@ -36,7 +36,7 @@
         android:layout_marginTop="18dp"
         android:padding="12dp"
         android:gravity="top|start"
-        android:textColor="@color/softblack"
+        android:textColor="@color/soft_black"
         android:textColorHint="@color/gray"
         android:background="@drawable/rounded_edit_text"/>
 

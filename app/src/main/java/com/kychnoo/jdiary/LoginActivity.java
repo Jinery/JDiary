@@ -44,12 +44,12 @@ public class LoginActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString();
 
                 if(phoneNumber.trim().isEmpty() || password.trim().isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+                    NotificationHelper.show(LoginActivity.this, "Заполните все поля", NotificationHelper.NotificationColor.INFO, 1000);
                     return;
                 }
 
                 if (!phoneNumber.trim().matches("\\d+")) {
-                    Toast.makeText(LoginActivity.this, "Номер телефона должен содержать только цифры", Toast.LENGTH_SHORT).show();
+                    NotificationHelper.show(LoginActivity.this, "Номер телефона должен содержать только цифры", NotificationHelper.NotificationColor.WARNING, 1000);
                     return;
                 }
 
@@ -66,17 +66,17 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                             }else {
-                                Toast.makeText(LoginActivity.this, "Вход выполнен", Toast.LENGTH_SHORT).show();
+                                NotificationHelper.show(LoginActivity.this, "Вход выполнен", NotificationHelper.NotificationColor.SUCCESS, 1000);
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.putExtra("phone", phoneNumber);
                                 startActivity(intent);
                                 finish();
                             }
                         } else {
-                            Toast.makeText(LoginActivity.this, "Неверный пароль", Toast.LENGTH_SHORT).show();
+                            NotificationHelper.show(LoginActivity.this, "Неверный пароль.", NotificationHelper.NotificationColor.WARNING, 1000);
                         }
                     } else {
-                        Toast.makeText(LoginActivity.this, "Пользователь не найден", Toast.LENGTH_SHORT).show();
+                        NotificationHelper.show(LoginActivity.this, "Пользователь не найден", NotificationHelper.NotificationColor.WARNING, 2000);
                     }
                 } finally {
                     if (cursor != null) {

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 
 import com.kychnoo.jdiary.Database.DatabaseHelper;
+import com.kychnoo.jdiary.Notifications.NotificationHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,14 +48,14 @@ public class ChooseClassActivity extends AppCompatActivity {
                 String selectedClassName = spinnerClasses.getSelectedItem().toString();
                 int result = databaseHelper.updateUserClass(phoneNumber, selectedClassName);
                 if(result > 0) {
-                    Toast.makeText(ChooseClassActivity.this, "Успешно выбран класс: " + selectedClassName, Toast.LENGTH_SHORT);
+                    NotificationHelper.show(ChooseClassActivity.this, "Успешно выбран класс: " + selectedClassName, NotificationHelper.NotificationColor.INFO, 1000);
                     Intent intent = new Intent(ChooseClassActivity.this, MainActivity.class);
                     intent.putExtra("phone", phoneNumber);
                     startActivity(intent);
                     finish();
                 }
                 else {
-                    Toast.makeText(ChooseClassActivity.this, "Не удалось выбрать класс: " + selectedClassName, Toast.LENGTH_SHORT);
+                    NotificationHelper.show(ChooseClassActivity.this, "Не удалось выбрать " + selectedClassName + " класс.", NotificationHelper.NotificationColor.ERROR, 1000);
                 }
             }
         });

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical"
     android:padding="16dp"
-    android:background="@color/whitesmoke">
+    android:background="@color/white_smoke">
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:padding="6dp"
         android:layout_marginBottom="6dp"
-        android:textColor="@color/softblack"
+        android:textColor="@color/soft_black"
         android:textColorHint="@color/gray"
         android:hint="@string/edit_text_username"
         android:background="@drawable/rounded_edit_text"/>
@@ -32,7 +32,7 @@
         android:id="@+id/etPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/softblack"
+        android:textColor="@color/soft_black"
         android:textColorHint="@color/gray"
         android:hint="@string/edit_text_phone_number"
         android:padding="6dp"
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:padding="6dp"
         android:layout_marginBottom="6dp"
-        android:textColor="@color/softblack"
+        android:textColor="@color/soft_black"
         android:textColorHint="@color/gray"
         android:hint="@string/edit_text_mail"
         android:inputType="textEmailAddress"
@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:padding="6dp"
         android:layout_marginBottom="6dp"
-        android:textColor="@color/softblack"
+        android:textColor="@color/soft_black"
         android:textColorHint="@color/gray"
         android:hint="@string/edit_text_password"
         android:inputType="textPassword"
@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:padding="6dp"
         android:layout_marginBottom="6dp"
-        android:textColor="@color/softblack"
+        android:textColor="@color/soft_black"
         android:textColorHint="@color/gray"
         android:hint="@string/edit_text_accept_password"
         android:inputType="textPassword"

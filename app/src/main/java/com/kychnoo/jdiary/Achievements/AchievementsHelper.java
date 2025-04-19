@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.kychnoo.jdiary.Database.DatabaseHelper;
+import com.kychnoo.jdiary.OtherClasses.Achievement;
 
 public class AchievementsHelper {
 
@@ -22,10 +23,10 @@ public class AchievementsHelper {
     private static void createAchievements() {
 
         if(!databaseHelper.isAchievementExistsByName("Теперь я с вами"))
-            databaseHelper.addAchievement("Теперь я с вами", "Зарегистрироваться в приложении.");
+            databaseHelper.addAchievement("Теперь я с вами", "Зарегистрироваться в приложении.", "ic_new_user", Achievement.RARITY_BRONZE);
 
         if(!databaseHelper.isAchievementExistsByName("Это только начало"))
-            databaseHelper.addAchievement("Это только начало", "Пройти свой первый тест.");
+            databaseHelper.addAchievement("Это только начало", "Пройти свой первый тест.", "ic_first_test", Achievement.RARITY_BRONZE);
 
     }
 
