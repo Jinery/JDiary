@@ -46,17 +46,25 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestViewHold
         return testList.size();
     }
 
+    public void updateData(List<Test> newData) {
+        this.testList.clear();
+        this.testList.addAll(newData);
+        notifyDataSetChanged();
+    }
+
     public class TestViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView tvTestName;
         private TextView tvQuestionsCount;
         private TextView tvPoints;
+        private TextView tvStatus;
 
         public TestViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTestName = itemView.findViewById(R.id.tvTestName);
             tvQuestionsCount = itemView.findViewById(R.id.tvQuestionsCount);
             tvPoints = itemView.findViewById(R.id.tvPoints);
+            tvStatus = itemView.findViewById(R.id.tvStatus);
             itemView.setOnClickListener(this);
         }
 
@@ -64,6 +72,7 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestViewHold
             tvTestName.setText(test.getName());
             tvQuestionsCount.setText(test.getQuestionsCount() + " вопросов");
             tvPoints.setText(test.getPoints() + " баллов");
+            tvStatus.setVisibility(test.isPassed() ? View.VISIBLE : View.GONE);
         }
 
         @Override

@@ -52,6 +52,13 @@ public class TestsFragment extends Fragment implements TestsAdapter.OnTestClickL
         toolbarTitleSetter = null;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        List<Test> tests = loadTests();
+        testsAdapter.updateData(tests);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,35 +72,39 @@ public class TestsFragment extends Fragment implements TestsAdapter.OnTestClickL
         rvTests = view.findViewById(R.id.testsRecyclerView);
         rvTests.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        loadTests();
+        List<Test> tests = loadTests();
+
+        testsAdapter = new TestsAdapter(tests, this);
+        rvTests.setAdapter(testsAdapter);
 
         return view;
     }
 
-    private void loadTests() {
+    private List<Test> loadTests() {
+        List<Test> testList = new ArrayList<>();
+
         Cursor cursor = databaseHelper.getUserByPhone(phone);
-        if(cursor != null && cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             String userClass = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CLASS));
             cursor.close();
 
             Cursor testsCursor = databaseHelper.getTestsByClass(userClass);
-            if(testsCursor != null) {
-                List<Test> testList = new ArrayList<>();
-                while(testsCursor.moveToNext()) {
+            if (testsCursor != null) {
+                while (testsCursor.moveToNext()) {
                     int id = testsCursor.getInt(testsCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TEST_ID));
                     String name = testsCursor.getString(testsCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TEST_NAME));
                     int questionsCount = testsCursor.getInt(testsCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TEST_QUESTIONS_COUNT));
                     int points = testsCursor.getInt(testsCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TEST_POINTS));
                     String className = testsCursor.getString(testsCursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_TEST_CLASS));
+                    boolean isPassedTest = databaseHelper.hasUserPassedTest(phone, id);
 
-                    testList.add(new Test(id, name, questionsCount, points, className));
+                    testList.add(new Test(id, name, questionsCount, points, className, isPassedTest));
                 }
                 testsCursor.close();
-
-                testsAdapter = new TestsAdapter(testList, this);
-                rvTests.setAdapter(testsAdapter);
             }
         }
+        testList.sort((test1, test2) -> Boolean.compare(test1.isPassed(), test2.isPassed()));
+        return testList;
     }
 
 
