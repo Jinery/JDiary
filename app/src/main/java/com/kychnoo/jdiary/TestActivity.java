@@ -5,6 +5,9 @@ import android.database.Cursor;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -13,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -59,8 +63,14 @@ public class TestActivity extends AppCompatActivity {
         testId = getIntent().getIntExtra("test_id", -1);
         userPhone = getIntent().getStringExtra("user_phone");
 
-        questionList = loadQuestions(testId);
-        Collections.shuffle(questionList);
+        if (savedInstanceState != null) {
+            questionList = savedInstanceState.getParcelableArrayList("questions");
+            currentQuestionIndex = savedInstanceState.getInt("currentQuestionIndex");
+        } else {
+            questionList = loadQuestions(testId);
+            Collections.shuffle(questionList);
+            currentQuestionIndex = 0;
+        }
 
 
         if(questionList == null || questionList.isEmpty()) {
@@ -71,6 +81,20 @@ public class TestActivity extends AppCompatActivity {
 
         loadCurrentQuestion();
         setupNextButton();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("questions", new ArrayList<>(questionList));
+        outState.putInt("currentQuestionIndex", currentQuestionIndex);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        questionList = savedInstanceState.getParcelableArrayList("questions");
+        currentQuestionIndex = savedInstanceState.getInt("currentQuestionIndex");
     }
 
     private List<Question> loadQuestions(int testId) {

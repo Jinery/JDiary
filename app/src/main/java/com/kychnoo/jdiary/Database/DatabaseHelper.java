@@ -30,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_USERNAME = "username";
     public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_EXPERIENCE_POINTS = "experience_points";
+    public static final String COLUMN_USER_ICON= "user_icon";
 
     public static final String TABLE_CLASSES = "classes";
     public static final String COLUMN_CLASS_NAME = "class_name";
@@ -123,7 +124,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_CLASS + " TEXT, " +
                 COLUMN_USERNAME + " TEXT NOT NULL UNIQUE, " +
                 COLUMN_DESCRIPTION  + " TEXT, " +
-                COLUMN_EXPERIENCE_POINTS + " INTEGER DEFAULT 0)";
+                COLUMN_EXPERIENCE_POINTS + " INTEGER DEFAULT 0, " +
+                COLUMN_USER_ICON + " TEXT)";
 
         String createClassesTable = "CREATE TABLE " + TABLE_CLASSES + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -248,6 +250,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_USERNAME, username);
         values.put(COLUMN_DESCRIPTION, (String)null);
         values.put(COLUMN_EXPERIENCE_POINTS, 0);
+        values.put(COLUMN_USER_ICON, (String)null);
         return database.insert(TABLE_USERS, null, values);
     }
 
@@ -255,7 +258,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         return database.query(
                 TABLE_USERS,
-                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION, COLUMN_EXPERIENCE_POINTS},
+                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION, COLUMN_EXPERIENCE_POINTS, COLUMN_USER_ICON },
                 COLUMN_PHONE + " =?",
                 new String[] { phoneNumber },
                 null,
@@ -268,7 +271,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         return database.query(
                 TABLE_USERS,
-                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION, COLUMN_EXPERIENCE_POINTS},
+                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION, COLUMN_EXPERIENCE_POINTS, COLUMN_USER_ICON },
                 COLUMN_USERNAME + " =?",
                 new String[] { username },
                 null,
@@ -295,7 +298,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         return database.query(
                 TABLE_USERS,
-                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION, COLUMN_EXPERIENCE_POINTS },
+                new String[] { COLUMN_ID, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_CLASS, COLUMN_USERNAME, COLUMN_DESCRIPTION, COLUMN_EXPERIENCE_POINTS, COLUMN_USER_ICON },
                 COLUMN_CLASS + " =?",
                 new String[] { className },
                 null,
@@ -363,6 +366,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_PHONE + " =?",
                 new String[] { phoneNumber }
         );
+    }
+
+    //User Icons Works Method.
+    public void updateUserIcon(String phone, String iconPath) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USER_ICON, iconPath);
+        database.update(TABLE_USERS, values, COLUMN_PHONE + " = ?", new String[]{phone});
+    }
+
+    public String getUserIcon(String phone) {
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.query(
+                TABLE_USERS,
+                new String[]{ COLUMN_USER_ICON },
+                COLUMN_PHONE + " = ?",
+                new String[]{phone},
+                null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            String icon = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ICON));
+            cursor.close();
+            return icon;
+        }
+        return null;
     }
 
     //Tests Works Methods.

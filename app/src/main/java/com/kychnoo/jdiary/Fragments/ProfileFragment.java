@@ -1,9 +1,18 @@
 package com.kychnoo.jdiary.Fragments;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -12,15 +21,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.kychnoo.jdiary.Adapters.AchievementsAdapter;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
 import com.kychnoo.jdiary.Interfaces.ToolbarTitleSetter;
@@ -28,10 +40,14 @@ import com.kychnoo.jdiary.Notifications.NotificationHelper;
 import com.kychnoo.jdiary.OtherClasses.Achievement;
 import com.kychnoo.jdiary.R;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileFragment extends Fragment {
+
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     private DatabaseHelper databaseHelper;
     private String phone;
@@ -39,6 +55,8 @@ public class ProfileFragment extends Fragment {
 
     private TextView tvDescription;
     private TextView tvUserPoints;
+
+    private ImageView ivUserIcon;
 
     private ToolbarTitleSetter toolbarTitleSetter;
 
@@ -77,6 +95,7 @@ public class ProfileFragment extends Fragment {
         TextView tvClass = view.findViewById(R.id.tvUserClass);
         tvDescription = view.findViewById(R.id.tvUserDescription);
         tvUserPoints = view.findViewById(R.id.tvUserPoints);
+        ivUserIcon = view.findViewById(R.id.ivUserIcon);
 
         rvAchievements = view.findViewById(R.id.rvAchievements);
         rvAchievements.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -94,16 +113,20 @@ public class ProfileFragment extends Fragment {
             String userClass = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CLASS));
             String userDescription = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION));
             String userPoints = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_EXPERIENCE_POINTS));
+            String userIconPath = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USER_ICON));
             tvUsername.setText(username);
             tvClass.setText("Ученик " + userClass + " класса.");
             tvUserPoints.setText("У вас " + userPoints + " очков.");
             updateUserDescription(userDescription);
+            updateUserIcon(userIconPath);
             cursor.close();
         } else {
             NotificationHelper.show(requireActivity(), "Пользователь не найден", NotificationHelper.NotificationColor.ERROR, 1000);
         }
 
         loadAchievements();
+
+        ivUserIcon.setOnClickListener(v -> showIconSelectionDialog());
 
         return view;
     }
@@ -167,6 +190,73 @@ public class ProfileFragment extends Fragment {
             tvDescription.setText("Описание отсутствует.");
         else
             tvDescription.setText(newDescription);
+    }
+
+    private void showIconSelectionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Выберите иконку");
+
+        builder.setPositiveButton("Из галереи", (dialog, which) -> {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        });
+
+        builder.setNegativeButton("Отмена", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+            Uri selectedImageUri = data.getData();
+
+            requireContext().getContentResolver().takePersistableUriPermission(
+                    selectedImageUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+            );
+
+            updateUserIcon(selectedImageUri.toString());
+            databaseHelper.updateUserIcon(phone, selectedImageUri.toString());
+        }
+    }
+
+    private void updateUserIcon(String imageUriString) {
+
+        ImageView ivHeaderIcon = null;
+
+
+        Activity activity = getActivity();
+        if(activity instanceof AppCompatActivity) {
+            NavigationView navigationView = activity.findViewById(R.id.nav_view);
+            if(navigationView != null) {
+                View headerView = navigationView.getHeaderView(0);
+                ivHeaderIcon = headerView.findViewById(R.id.ivHeaderUserIcon);
+            }
+        }
+        if (imageUriString == null || imageUriString.isEmpty()) {
+            ivUserIcon.setImageResource(R.drawable.ic_user_icon);
+            return;
+        }
+
+        Uri imageUri = Uri.parse(imageUriString);
+        try (InputStream inputStream = requireContext().getContentResolver().openInputStream(imageUri)) {
+            if (inputStream != null) {
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                ivUserIcon.setImageBitmap(bitmap);
+                if(ivHeaderIcon != null)
+                    ivHeaderIcon.setImageBitmap(bitmap);
+            } else {
+                throw new IOException("Не удалось открыть файл");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            NotificationHelper.show(requireActivity(), "Ошибка загрузки изображения", NotificationHelper.NotificationColor.ERROR, 1500);
+            ivUserIcon.setImageResource(R.drawable.ic_user_icon);
+        }
     }
 
     private void loadAchievements() {
