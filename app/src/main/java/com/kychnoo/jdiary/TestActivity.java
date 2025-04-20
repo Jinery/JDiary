@@ -2,6 +2,8 @@ package com.kychnoo.jdiary;
 
 import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,11 +11,15 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.radiobutton.MaterialRadioButton;
+import com.google.android.material.shape.CornerFamily;
+import com.google.android.material.shape.ShapeAppearanceModel;
 import com.kychnoo.jdiary.Achievements.AchievementsHelper;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
 import com.kychnoo.jdiary.Notifications.NotificationHelper;
@@ -22,6 +28,7 @@ import com.kychnoo.jdiary.OtherClasses.Question;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -40,6 +47,8 @@ public class TestActivity extends AppCompatActivity {
 
     private ProgressBar pbProgress;
 
+    private MaterialRadioButton selectedRadioButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,13 +60,17 @@ public class TestActivity extends AppCompatActivity {
         userPhone = getIntent().getStringExtra("user_phone");
 
         questionList = loadQuestions(testId);
+        Collections.shuffle(questionList);
+
+
         if(questionList == null || questionList.isEmpty()) {
-            Toast.makeText(this, "Нет вопросов для этого теста.", Toast.LENGTH_SHORT).show();
+            NotificationHelper.show(this, "Нет вопросов для этого теста.", NotificationHelper.NotificationColor.INFO, 1000);
             finish();
             return;
         }
 
         loadCurrentQuestion();
+        setupNextButton();
     }
 
     private List<Question> loadQuestions(int testId) {
@@ -121,48 +134,90 @@ public class TestActivity extends AppCompatActivity {
             tvQuestion.setText(question.getText());
             rgAnswers.removeAllViews();
 
-            for (Answer answer : question.getAnswers()) {
-                RadioButton radioButton = new RadioButton(this);
+            List<Answer> randomizedAnswers = new ArrayList<>(question.getAnswers());
+            Collections.shuffle(randomizedAnswers);
+
+            for (Answer answer : randomizedAnswers) {
+                MaterialRadioButton radioButton = new MaterialRadioButton(this);
                 radioButton.setText(answer.getText());
                 radioButton.setId(View.generateViewId());
+                radioButton.setElevation(4);
+                radioButton.setTextColor(ContextCompat.getColor(this, R.color.soft_black));
+                radioButton.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.light_blue)));
+
                 rgAnswers.addView(radioButton);
             }
+
+            rgAnswers.setOnCheckedChangeListener((group, checkedId) -> {
+                MaterialRadioButton selectedButton = findViewById(checkedId);
+                if (selectedButton != null) {
+                    selectedRadioButton = selectedButton;
+                    selectedButton.animate()
+                            .scaleX(1.05f)
+                            .scaleY(1.05f)
+                            .setDuration(200)
+                            .withEndAction(() -> selectedButton.animate().scaleX(1f).scaleY(1f).start())
+                            .start();
+                }
+            });
 
             btnNext.setOnClickListener(v -> {
                 if (rgAnswers.getCheckedRadioButtonId() == -1) {
                     NotificationHelper.show(this, "Выберите ответ", NotificationHelper.NotificationColor.WARNING, 1000);
                     return;
                 }
+                for (int i = 0; i < rgAnswers.getChildCount(); i++) {
+                    View child = rgAnswers.getChildAt(i);
+                    if (child instanceof RadioButton) {
+                        child.setClickable(false);
+                    }
+                }
 
                 RadioButton selectedButton = findViewById(rgAnswers.getCheckedRadioButtonId());
                 String selectedAnswerText = selectedButton.getText().toString();
 
+                boolean isCorrect = false;
+                String explanation = "";
+
                 for (Answer answer : question.getAnswers()) {
                     if (answer.getText().equals(selectedAnswerText)) {
-                        if (answer.isCorrect()) {
-                            runOnUiThread(() -> {
-                                pbProgress.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
-                            });
-                            correctAnswersCount++;
-                        } else {
-                            runOnUiThread(() -> {
-                                pbProgress.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.red)));
-                            });
-                        }
+                        isCorrect = answer.isCorrect();
+                        explanation = isCorrect ? "Отлично!" : "Увы, это неверный ответ.";
                         break;
                     }
                 }
 
-                currentQuestionIndex++;
-                if (currentQuestionIndex < questionList.size()) {
-                    loadCurrentQuestion();
+                if (isCorrect) {
+                    runOnUiThread(() -> {
+                        pbProgress.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+                    });
+                    correctAnswersCount++;
                 } else {
-                    finishTest();
+                    runOnUiThread(() -> {
+                        pbProgress.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.red)));
+                    });
                 }
+
+                currentQuestionIndex++;
+
+                showBottomMenu(isCorrect, explanation);
             });
         } else {
             finishTest();
         }
+    }
+
+    private void setupNextButton() {
+        Button btnNextQuestion = findViewById(R.id.btnNextQuestion);
+        btnNextQuestion.setOnClickListener(v -> {
+            hideBottomMenu();
+
+            if (currentQuestionIndex < questionList.size()) {
+                loadCurrentQuestion();
+            } else {
+                finishTest();
+            }
+        });
     }
 
     private void finishTest() {
@@ -182,6 +237,54 @@ public class TestActivity extends AppCompatActivity {
 
         NotificationHelper.show(this, "Тест завершен! Вы набрали " + experiencePoints + " баллов.", NotificationHelper.NotificationColor.INFO, 1000);
         finish();
+    }
+
+    private void showBottomMenu(boolean isCorrect, String explanation) {
+        MaterialCardView bottomMenu = findViewById(R.id.bottomMenu);
+        TextView tvResult = findViewById(R.id.tvResult);
+        TextView tvExplanation = findViewById(R.id.tvExplanation);
+        Button btnNextQuestion = findViewById(R.id.btnNextQuestion);
+
+        float cornerSize = 16 * this.getResources().getDisplayMetrics().density;
+
+        ShapeAppearanceModel shapeAppearanceModel = new ShapeAppearanceModel()
+                .toBuilder()
+                .setTopLeftCorner(CornerFamily.ROUNDED, cornerSize)
+                .setTopRightCorner(CornerFamily.ROUNDED, cornerSize)
+                .setBottomLeftCorner(CornerFamily.ROUNDED, 0)
+                .setBottomRightCorner(CornerFamily.ROUNDED, 0)
+                .build();
+
+        bottomMenu.setShapeAppearanceModel(shapeAppearanceModel);
+
+        tvResult.setText(isCorrect ? "Верно" : "Неверно");
+        int bottomMenuColorIndex = ContextCompat.getColor(this, isCorrect ? R.color.green : R.color.red);
+        bottomMenu.setStrokeColor(bottomMenuColorIndex);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            bottomMenu.setOutlineSpotShadowColor(bottomMenuColorIndex);
+        }
+
+        tvResult.setTextColor(bottomMenuColorIndex);
+        selectedRadioButton.setButtonTintList(ColorStateList.valueOf(bottomMenuColorIndex));
+        btnNextQuestion.setBackgroundColor(bottomMenuColorIndex);
+        tvExplanation.setText(explanation);
+
+        bottomMenu.setVisibility(View.VISIBLE);
+        bottomMenu.animate()
+                .translationY(0)
+                .setDuration(200)
+                .start();
+    }
+
+    private void hideBottomMenu() {
+        MaterialCardView bottomMenu = findViewById(R.id.bottomMenu);
+
+        bottomMenu.animate()
+                .translationY(bottomMenu.getHeight())
+                .setDuration(200)
+                .withEndAction(() -> bottomMenu.setVisibility(View.GONE))
+                .start();
     }
 
     private int calculateGrade(double percentage) {
