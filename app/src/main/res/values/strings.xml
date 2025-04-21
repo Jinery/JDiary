@@ -15,7 +15,7 @@
     <string name="button_register">Регистрация</string>
     <string name="button_enter">Вход</string>
 
-    <string name="no_account_text">Нету аккаунта?</string>
+    <string name="no_account_text">Нет аккаунта?</string>
     <string name="has_account_text">Уже есть аккаунт?</string>
 
     <string name="button_no_account_enter">Зарегистрироваться</string>

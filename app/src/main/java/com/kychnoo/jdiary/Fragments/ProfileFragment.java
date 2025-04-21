@@ -9,10 +9,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -23,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -194,7 +191,7 @@ public class ProfileFragment extends Fragment {
 
     private void showIconSelectionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Выберите иконку");
+        builder.setTitle("Выбрать иконку");
 
         builder.setPositiveButton("Из галереи", (dialog, which) -> {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);

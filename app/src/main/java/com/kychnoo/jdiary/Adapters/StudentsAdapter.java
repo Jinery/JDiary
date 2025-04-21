@@ -13,9 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.kychnoo.jdiary.Notifications.NotificationHelper;
+import com.google.android.material.card.MaterialCardView;
 import com.kychnoo.jdiary.OtherClasses.Student;
 import com.kychnoo.jdiary.R;
 
@@ -50,6 +51,29 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
 
         holder.tvExperincePoints.setText("Очков: " + student.getExperiencePoints());
         holder.bindIcon(student.getIconPath());
+
+        if(position < 3) {
+            holder.ivRatingCup.setVisibility(View.VISIBLE);
+
+            switch(position) {
+                case 0:
+                    holder.cardView.setBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.darkslate_blue));
+                    holder.ivRatingCup.setImageResource(R.drawable.ic_gold_cup);
+                    break;
+                case 1:
+                    holder.cardView.setBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.lavender));
+                    holder.ivRatingCup.setImageResource(R.drawable.ic_silver_cup);
+                    break;
+                case 2:
+                    holder.cardView.setBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.sienna));
+                    holder.ivRatingCup.setImageResource(R.drawable.ic_bronze_cup);
+                    int textColorIndex = ContextCompat.getColor(holder.cardView.getContext(), R.color.white_smoke);
+                    holder.tvDescription.setTextColor(textColorIndex);
+                    holder.tvExperincePoints.setTextColor(textColorIndex);
+                    break;
+            }
+        }
+        holder.tvPosition.setText(String.valueOf(position + 1));
     }
 
     @Override
@@ -58,17 +82,26 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
     }
 
     public static class StudentViewHolder extends RecyclerView.ViewHolder {
+
+        private MaterialCardView cardView;
+
         TextView usernameText;
         TextView tvDescription;
         TextView tvExperincePoints;
+        TextView tvPosition;
         ImageView ivUserIcon;
+
+        ImageView ivRatingCup;
 
         public StudentViewHolder(@NonNull View itemView) {
             super(itemView);
+            cardView = itemView.findViewById(R.id.card_view);
             usernameText = itemView.findViewById(R.id.tvUsername);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvExperincePoints = itemView.findViewById(R.id.tvExperiencePoints);
+            tvPosition = itemView.findViewById(R.id.tvPosition);
             ivUserIcon = itemView.findViewById(R.id.ivIcon);
+            ivRatingCup = itemView.findViewById(R.id.ivRatingCup);
         }
 
         public void bindIcon(String imageUri) {

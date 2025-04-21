@@ -6,6 +6,7 @@
 
     <color name="white">#FFFFFFFF</color>
     <color name="snow">#FFFAFA</color>
+    <color name="lavender">#E6E6FA</color>
     <color name="white_smoke">#F5F5F5</color>
 
     <color name="gray">#808080</color>
@@ -20,10 +21,15 @@
 
     <color name="red">#FF0000</color>
 
+    <color name="sienna">#A0522D</color>
+
     <color name="green">#008000</color>
 
     <color name="gold">#FFD700</color>
 
+    <color name="bronze">#CD7F32</color>
+
+    <color name="darkslate_blue">#483D8B</color>
     <color name="epic_mystic_purple">#6C5B7B</color>
 
     <!--  Only for notifications.  -->

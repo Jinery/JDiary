@@ -1,20 +1,26 @@
 package com.kychnoo.jdiary;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.kychnoo.jdiary.Database.DatabaseHelper;
 import com.kychnoo.jdiary.Notifications.NotificationHelper;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private static final int REQUEST_CODE_STORAGE_PERMISSION = 100;
 
     private EditText etPhone;
     private EditText etPassword;
@@ -37,19 +43,39 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnGoToRegister = findViewById(R.id.btnGoToRegister);
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_STORAGE_PERMISSION
+            );
+        }
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String phoneNumber = etPhone.getText().toString();
                 String password = etPassword.getText().toString();
 
-                if(phoneNumber.trim().isEmpty() || password.trim().isEmpty()) {
+                if(TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(password)) {
                     NotificationHelper.show(LoginActivity.this, "Заполните все поля", NotificationHelper.NotificationColor.INFO, 1000);
                     return;
                 }
 
-                if (!phoneNumber.trim().matches("\\d+")) {
-                    NotificationHelper.show(LoginActivity.this, "Номер телефона должен содержать только цифры", NotificationHelper.NotificationColor.WARNING, 1000);
+                if (!phoneNumber.trim().matches("\\+?\\d*")) {
+                    NotificationHelper.show(LoginActivity.this, "Номер телефона не может содержать символы.", NotificationHelper.NotificationColor.WARNING, 1000);
+                    return;
+                }
+
+                int phoneNumberLength = phoneNumber.trim().replace("+", "").length();
+
+                if (phoneNumberLength < 10) {
+                    NotificationHelper.show(LoginActivity.this, "Номер телефона слишком короткий. Минимальная длина: 10 цифр.", NotificationHelper.NotificationColor.WARNING, 1000);
+                    return;
+                }
+
+                if (phoneNumberLength > 15) {
+                    NotificationHelper.show(LoginActivity.this, "Номер телефона слишком длинный. Максимальная длина: 15 цифр.", NotificationHelper.NotificationColor.WARNING, 1000);
                     return;
                 }
 

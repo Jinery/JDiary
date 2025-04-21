@@ -2,10 +2,8 @@ package com.kychnoo.jdiary.Fragments;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kychnoo.jdiary.Adapters.StudentsAdapter;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
 import com.kychnoo.jdiary.Interfaces.ToolbarTitleSetter;
-import com.kychnoo.jdiary.Notifications.NotificationHelper;
 import com.kychnoo.jdiary.OtherClasses.Student;
 import com.kychnoo.jdiary.R;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +36,6 @@ public class ClassFragment extends Fragment {
     private String phone;
 
     private ToolbarTitleSetter toolbarTitleSetter;
-
-    private ImageView ivUserIcon;
 
 
     @Override
@@ -91,6 +84,7 @@ public class ClassFragment extends Fragment {
                     String description = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION));
                     int experiencePoints = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_EXPERIENCE_POINTS));
                     String userIconPath = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USER_ICON));
+                    Log.d("Class Fragment.", "Sended userIconPath " + userIconPath);
                     studentList.add(new Student(username, description, userIconPath, experiencePoints));
                 }
                 while(cursor.moveToNext());

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -10,8 +11,8 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="2dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="1dp"
         app:cardBackgroundColor="#FFFFFF"
         app:contentPadding="16dp">
 
@@ -21,12 +22,22 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
+            <TextView
+                android:id="@+id/tvPosition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
+
             <ImageView
                 android:id="@+id/ivIcon"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
                 android:src="@drawable/ic_user_icon"
                 android:scaleType="centerCrop"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"/>
 
             <LinearLayout
@@ -57,17 +68,35 @@
                     android:ellipsize="end"
                     android:layout_marginTop="4dp"/>
 
-                <TextView
-                    android:id="@+id/tvExperiencePoints"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Points"
-                    android:textSize="14sp"
-                    android:textColor="@color/gray"
-                    android:maxLines="2"
-                    android:ellipsize="end"
-                    android:layout_marginTop="4dp"/>
+                    android:orientation="horizontal"
+                    android:layout_marginTop="4dp">
+
+                    <TextView
+                        android:id="@+id/tvExperiencePoints"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Points"
+                        android:textSize="14sp"
+                        android:textColor="@color/gray"/>
+
+                    <ImageView
+                        android:id="@+id/ivStar"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_point"
+                        android:layout_marginStart="4dp" />
+                </LinearLayout>
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivRatingCup"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:visibility="gone"/>
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

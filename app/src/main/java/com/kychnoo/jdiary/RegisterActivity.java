@@ -3,6 +3,7 @@ package com.kychnoo.jdiary;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,13 +53,25 @@ public class RegisterActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString();
                 String acceptPassword = etAcceptPassword.getText().toString();
 
-                if(username.trim().isEmpty() || phoneNumber.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty() || acceptPassword.trim().isEmpty()) {
+                if(TextUtils.isEmpty(username) || TextUtils.isEmpty(phoneNumber)  || TextUtils.isEmpty(email)  || TextUtils.isEmpty(password)  || TextUtils.isEmpty(acceptPassword)) {
                     NotificationHelper.show(RegisterActivity.this, "Заполните все поля", NotificationHelper.NotificationColor.INFO, 1000);
                     return;
                 }
 
-                if (!phoneNumber.trim().matches("\\d+")) {
-                    NotificationHelper.show(RegisterActivity.this, "Номер телефона должен содержать только цифры", NotificationHelper.NotificationColor.INFO, 1000);
+                if (!phoneNumber.trim().matches("\\+?\\d*")) {
+                    NotificationHelper.show(RegisterActivity.this, "Номер телефона не может содержать символы.", NotificationHelper.NotificationColor.WARNING, 1000);
+                    return;
+                }
+
+                int phoneNumberLength = phoneNumber.trim().replace("+", "").length();
+
+                if (phoneNumberLength < 10) {
+                    NotificationHelper.show(RegisterActivity.this, "Номер телефона слишком короткий. Минимальная длина: 10 цифр.", NotificationHelper.NotificationColor.WARNING, 1000);
+                    return;
+                }
+
+                if (phoneNumberLength > 15) {
+                    NotificationHelper.show(RegisterActivity.this, "Номер телефона слишком длинный. Максимальная длина: 15 цифр.", NotificationHelper.NotificationColor.WARNING, 1000);
                     return;
                 }
 
