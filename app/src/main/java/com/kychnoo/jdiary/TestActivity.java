@@ -1,5 +1,6 @@
 package com.kychnoo.jdiary;
 
+import android.animation.ObjectAnimator;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.drawable.RippleDrawable;
@@ -9,7 +10,9 @@ import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -19,12 +22,15 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.ShapeAppearanceModel;
 import com.kychnoo.jdiary.Achievements.AchievementsHelper;
+import com.kychnoo.jdiary.Adapters.AnswerAdapter;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
 import com.kychnoo.jdiary.Notifications.NotificationHelper;
 import com.kychnoo.jdiary.OtherClasses.Answer;
@@ -50,8 +56,9 @@ public class TestActivity extends AppCompatActivity {
     private List<Question> questionList;
 
     private ProgressBar pbProgress;
+    private ImageButton backButton;
 
-    private MaterialRadioButton selectedRadioButton;
+    private TextView tvCurrentQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,12 @@ public class TestActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
         testId = getIntent().getIntExtra("test_id", -1);
         userPhone = getIntent().getStringExtra("user_phone");
+        pbProgress = findViewById(R.id.pbProgress);
+        tvCurrentQuestion = findViewById(R.id.tvCurrentQuestion);
+
+        findViewById(R.id.btnBack).setOnClickListener(view -> {
+            super.onBackPressed();
+        });
 
         if (savedInstanceState != null) {
             questionList = savedInstanceState.getParcelableArrayList("questions");
@@ -71,6 +84,10 @@ public class TestActivity extends AppCompatActivity {
             Collections.shuffle(questionList);
             currentQuestionIndex = 0;
         }
+
+        String testName = databaseHelper.getTestNameById(testId);
+        TextView tvTestTitle = findViewById(R.id.tvTestTitle);
+        tvTestTitle.setText(testName);
 
 
         if(questionList == null || questionList.isEmpty()) {
@@ -112,6 +129,7 @@ public class TestActivity extends AppCompatActivity {
         return questions;
     }
 
+
     private List<Answer> loadAnswers(int questionId) {
         List<Answer> answers = new ArrayList<>();
         Cursor answersCursor = databaseHelper.getAnswersByQuestionId(questionId);
@@ -131,102 +149,47 @@ public class TestActivity extends AppCompatActivity {
         if (currentQuestionIndex < questionList.size()) {
             Question question = questionList.get(currentQuestionIndex);
             TextView tvQuestion = findViewById(R.id.tvQuestion);
-            RadioGroup rgAnswers = findViewById(R.id.rgAnswers);
+            RecyclerView rvAnswers = findViewById(R.id.rvAnsers);
             Button btnNext = findViewById(R.id.btnNext);
-            pbProgress = findViewById(R.id.pbProgress);
 
-            pbProgress.setMax(questionList.size() * 10);
-
-            new Thread(() -> {
-                for(int pg = pbProgress.getProgress(); pg < currentQuestionIndex * 10; pg++) {
-                    try {
-                        Thread.sleep(20);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-
-                    int finalPg = pg;
-                    runOnUiThread(() -> {
-                        pbProgress.setProgress(finalPg);
-                    });
-                }
-                runOnUiThread(() -> {
-                    pbProgress.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.light_blue)));
-                });
-            }).start();
+            tvCurrentQuestion.setText(String.format("Вопрос: %d/%d", currentQuestionIndex + 1, questionList.size()));
 
             tvQuestion.setText(question.getText());
-            rgAnswers.removeAllViews();
-            rgAnswers.clearCheck();
 
-            List<Answer> randomizedAnswers = new ArrayList<>(question.getAnswers());
-            Collections.shuffle(randomizedAnswers);
+            Log.d("TestActivity", "Question: " + question.getText());
+            Log.d("TestActivity", "Answers count: " + question.getAnswers().size());
 
-            for (Answer answer : randomizedAnswers) {
-                MaterialRadioButton radioButton = new MaterialRadioButton(this);
-                radioButton.setText(answer.getText());
-                radioButton.setTextColor(ContextCompat.getColor(this, R.color.main_text));
-                radioButton.setId(View.generateViewId());
-                radioButton.setElevation(4);
-                radioButton.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.light_blue)));
-
-                rgAnswers.addView(radioButton);
-            }
-
-            rgAnswers.setOnCheckedChangeListener((group, checkedId) -> {
-                MaterialRadioButton selectedButton = findViewById(checkedId);
-                if (selectedButton != null) {
-                    selectedRadioButton = selectedButton;
-                    selectedButton.animate()
-                            .scaleX(1.05f)
-                            .scaleY(1.05f)
-                            .setDuration(200)
-                            .withEndAction(() -> selectedButton.animate().scaleX(1f).scaleY(1f).start())
-                            .start();
-                }
+            AnswerAdapter adapter = new AnswerAdapter(question.getAnswers(), (answer, position) -> {
+                Log.d("TestActivity", "Answer selected: " + answer.getText());
             });
 
+            rvAnswers.setLayoutManager(new LinearLayoutManager(this));
+            rvAnswers.setAdapter(adapter);
+
             btnNext.setOnClickListener(v -> {
-                Log.d("TestActivity", "Chcked Radio button id: " + rgAnswers.getCheckedRadioButtonId());
-                if (rgAnswers.getCheckedRadioButtonId() == -1) {
+                int selectedPos = adapter.getSelectedPosition();
+                if (selectedPos == -1) {
                     NotificationHelper.show(this, "Выберите ответ", NotificationHelper.NotificationColor.WARNING, 1000);
                     return;
                 }
-                for (int i = 0; i < rgAnswers.getChildCount(); i++) {
-                    View child = rgAnswers.getChildAt(i);
-                    if (child instanceof RadioButton) {
-                        child.setClickable(false);
-                    }
-                }
 
-                RadioButton selectedButton = findViewById(rgAnswers.getCheckedRadioButtonId());
-                String selectedAnswerText = selectedButton.getText().toString();
+                adapter.lockAnswers();
 
-                boolean isCorrect = false;
-                String explanation = "";
-
-                for (Answer answer : question.getAnswers()) {
-                    if (answer.getText().equals(selectedAnswerText)) {
-                        isCorrect = answer.isCorrect();
-                        explanation = isCorrect ? "Отлично!" : "Увы, это неверный ответ.";
-                        break;
-                    }
-                }
+                Answer selectedAnswer = adapter.getSelectedAnswer();
+                boolean isCorrect = selectedAnswer.isCorrect();
 
                 if (isCorrect) {
-                    runOnUiThread(() -> {
-                        pbProgress.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
-                    });
                     correctAnswersCount++;
+                    pbProgress.setProgressTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.green)));
                 } else {
-                    runOnUiThread(() -> {
-                        pbProgress.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.red)));
-                    });
+                    pbProgress.setProgressTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red)));
                 }
 
-                currentQuestionIndex++;
+                adapter.showAnswerResult();
 
-                showBottomMenu(isCorrect, explanation);
+                currentQuestionIndex++;
+                showBottomMenu(isCorrect, isCorrect ? "Отлично!" : "Увы, неверно.");
+                updateProgressBar();
             });
         } else {
             finishTest();
@@ -244,6 +207,35 @@ public class TestActivity extends AppCompatActivity {
                 finishTest();
             }
         });
+    }
+
+    private void updateProgressBar() {
+        if (pbProgress == null) {
+            pbProgress = findViewById(R.id.pbProgress);
+        }
+
+        if (pbProgress != null && questionList != null && !questionList.isEmpty()) {
+            int maxProgress = questionList.size() * 10;
+            int currentProgress = currentQuestionIndex * 10;
+
+            pbProgress.setMax(maxProgress);
+
+            ObjectAnimator progressAnimator = ObjectAnimator.ofInt(pbProgress, "progress", pbProgress.getProgress(), currentProgress);
+            progressAnimator.setDuration(500);
+            progressAnimator.setInterpolator(new DecelerateInterpolator());
+            progressAnimator.start();
+
+            int progressPercentage = (currentQuestionIndex * 100) / questionList.size();
+            if (progressPercentage >= 80) {
+                pbProgress.setProgressTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.green)));
+            } else if (progressPercentage >= 60) {
+                pbProgress.setProgressTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.blue)));
+            } else if (progressPercentage >= 40) {
+                pbProgress.setProgressTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.orange)));
+            } else {
+                pbProgress.setProgressTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red)));
+            }
+        }
     }
 
     private void finishTest() {
@@ -292,7 +284,6 @@ public class TestActivity extends AppCompatActivity {
         }
 
         tvResult.setTextColor(bottomMenuColorIndex);
-        selectedRadioButton.setButtonTintList(ColorStateList.valueOf(bottomMenuColorIndex));
         btnNextQuestion.setBackgroundColor(bottomMenuColorIndex);
         tvExplanation.setText(explanation);
 

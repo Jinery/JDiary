@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="near_black">#1D1B20</color>
+    <color name="soft_black">#212121</color>
+
+    <color name="white">#FFFFFFFF</color>
+    <color name="snow">#FFFAFA</color>
+    <color name="lavender">#E6E6FA</color>
+    <color name="white_smoke">#F5F5F5</color>
+
+    <color name="gray">#808080</color>
+    <color name="deep_gray">#49454F</color>
+    <color name="grainsboro">#DCDCDC</color>
+    <color name="cool_gray">#79747E</color>
+    <color name="light_gray">#D3D3D3</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="dimgray">#696969</color>
+
+    <color name="light_blue">#2192de</color>
+    <color name="blue">#0000FF</color>
+
+    <color name="red">#FF0000</color>
+
+    <color name="sienna">#A0522D</color>
+
+    <color name="green">#008000</color>
+
+    <color name="orange">#FFA500</color>
+
+    <color name="gold">#FFD700</color>
+
+    <color name="bronze">#CD7F32</color>
+
+    <color name="darkslate_blue">#483D8B</color>
+    <color name="epic_mystic_purple">#6C5B7B</color>
+
+    <!--  Main.  -->
+    <color name="main_background">#333333</color>
+    <color name="bottom">#1f1f1f</color>
+
+    <color name="card_background">#1D1B20</color>
+    <color name="card_stroke">#212121</color>
+
+    <color name="progressbar_background">#262525</color>
+
+    <color name="navigation_background">#333333</color>
+    <color name="navigation_header_background">#212121</color>
+    
+    <!--  Texts.  -->
+    <color name="main_text">#f2f2f2</color>
+    <color name="primary_text">#c4c4c4</color>
+
+    <color name="reversed_main_text">#1c1c1c</color>
+
+    <!--  Tables.  -->
+    <color name="schedule_table_row">#919191</color>
+
+    <!--  Inputs. -->
+    <color name="input_hint">#d4d4d4</color>
+
+    <!--  Only for notifications.  -->
+    <color name="error_notification">#ff4747</color>
+    <color name="success_notification">#3eab42</color>
+    <color name="warning_notification">#debb00</color>
+    <color name="info_notification">#292929</color>
+</resources>

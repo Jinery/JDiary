@@ -42,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Дальше"
+            android:textSize="18sp"
             android:padding="18dp"
             app:cornerRadius="10dp"
             android:layout_marginTop="16dp"
