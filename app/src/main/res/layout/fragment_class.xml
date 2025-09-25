@@ -12,6 +12,7 @@
         android:text="In ClassRoom"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:textColor="@color/main_text"
         android:maxLines="1"
         android:ellipsize="end"/>
 

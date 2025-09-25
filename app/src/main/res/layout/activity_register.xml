@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical"
     android:padding="16dp"
-    android:background="@color/white_smoke">
+    android:background="@color/main_background">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,6 +14,7 @@
         android:layout_gravity="center_horizontal"
         android:textSize="20sp"
         android:text="@string/welcome_register_text"
+        android:textColor="@color/main_text"
         android:padding="12dp"
         android:layout_marginBottom="6dp"/>
 
@@ -23,8 +24,8 @@
         android:layout_height="wrap_content"
         android:padding="6dp"
         android:layout_marginBottom="6dp"
-        android:textColor="@color/soft_black"
-        android:textColorHint="@color/gray"
+        android:textColor="@color/main_text"
+        android:textColorHint="@color/input_hint"
         android:hint="@string/edit_text_username"
         android:background="@drawable/rounded_edit_text"/>
 
@@ -32,8 +33,8 @@
         android:id="@+id/etPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/soft_black"
-        android:textColorHint="@color/gray"
+        android:textColor="@color/main_text"
+        android:textColorHint="@color/input_hint"
         android:hint="@string/edit_text_phone_number"
         android:padding="6dp"
         android:layout_marginBottom="6dp"
@@ -46,8 +47,8 @@
         android:layout_height="wrap_content"
         android:padding="6dp"
         android:layout_marginBottom="6dp"
-        android:textColor="@color/soft_black"
-        android:textColorHint="@color/gray"
+        android:textColor="@color/main_text"
+        android:textColorHint="@color/input_hint"
         android:hint="@string/edit_text_mail"
         android:inputType="textEmailAddress"
         android:background="@drawable/rounded_edit_text"/>
@@ -58,8 +59,8 @@
         android:layout_height="wrap_content"
         android:padding="6dp"
         android:layout_marginBottom="6dp"
-        android:textColor="@color/soft_black"
-        android:textColorHint="@color/gray"
+        android:textColor="@color/main_text"
+        android:textColorHint="@color/input_hint"
         android:hint="@string/edit_text_password"
         android:inputType="textPassword"
         android:background="@drawable/rounded_edit_text"/>
@@ -70,8 +71,8 @@
         android:layout_height="wrap_content"
         android:padding="6dp"
         android:layout_marginBottom="6dp"
-        android:textColor="@color/soft_black"
-        android:textColorHint="@color/gray"
+        android:textColor="@color/main_text"
+        android:textColorHint="@color/input_hint"
         android:hint="@string/edit_text_accept_password"
         android:inputType="textPassword"
         android:background="@drawable/rounded_edit_text"/>
@@ -86,6 +87,7 @@
         android:padding="12dp"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:textColor="@color/snow"
         android:layout_marginTop="6dp"
         app:backgroundTint="@color/light_blue" />
 
@@ -96,6 +98,7 @@
         android:textStyle="italic"
         android:textSize="18sp"
         android:layout_marginTop="18dp"
+        android:textColor="@color/main_text"
         android:text="@string/has_account_text"/>
 
     <com.google.android.material.button.MaterialButton
@@ -109,6 +112,7 @@
         android:padding="12dp"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:textColor="@color/snow"
         app:backgroundTint="@color/light_blue"/>
 
 

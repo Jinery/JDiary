@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_smoke">
+    android:background="@color/main_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Null"
-                    android:textColor="@color/white"
+                    android:textColor="@color/snow"
                     android:textSize="24sp"
                     android:maxLines="1"
                     android:ellipsize="end"/>
@@ -76,7 +76,7 @@
         android:textStyle="bold"
         android:textSize="22sp"
         android:padding="8dp"
-        android:textColor="@color/soft_black"/>
+        android:textColor="@color/main_text"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAchievements"

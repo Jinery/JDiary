@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
-    app:cardBackgroundColor="@color/white"
+    app:cardBackgroundColor="@color/bottom"
     app:cardElevation="8dp"
     app:cardPreventCornerOverlap="false"
     app:cardUseCompatPadding="false"
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="Верно"
             android:textSize="26sp"
-            android:textColor="@color/black"
+            android:textColor="@color/main_text"
             android:textStyle="bold"/>
 
         <TextView
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="Пояснение к ответу"
             android:textSize="14sp"
-            android:textColor="@color/gray"
+            android:textColor="@color/primary_text"
             android:layout_marginTop="8dp"/>
 
         <com.google.android.material.button.MaterialButton

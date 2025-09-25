@@ -7,6 +7,7 @@
     android:layout_margin="2dp"
     app:cardCornerRadius="6dp"
     app:cardElevation="2dp"
+    android:background="@color/card_background"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -24,7 +25,7 @@
                 android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/soft_black"
+                android:textColor="@color/main_text"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:ellipsize="end"
@@ -35,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@color/dimgray"
+                android:textColor="@color/primary_text"
                 android:layout_marginTop="4dp"/>
         </LinearLayout>
 

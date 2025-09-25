@@ -12,20 +12,15 @@
         android:layout_gravity="center_horizontal"
         android:textStyle="bold"
         android:textSize="20sp"
-        android:padding="6dp"/>
-
-    <TextView
-        android:padding="4dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="@string/nav_input_content"/>
+        android:textColor="@color/main_text"
+        android:padding="2dp"/>
 
     <TextView
         android:id="@+id/tvNoteContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
+        android:textColor="@color/main_text"
         android:padding="4dp"/>
 
 </LinearLayout>

@@ -8,7 +8,7 @@
     <item
         android:id="@+id/nav_myclass"
         android:icon="@drawable/ic_group"
-        android:title="@string/nav_myclass_string"/>
+        android:title="@string/nav_myclass_string" />
 
     <item
         android:id="@+id/nav_diary"

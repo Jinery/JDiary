@@ -7,8 +7,8 @@
     android:layout_margin="4dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
-    app:strokeColor="@color/light_gray"
-    app:cardBackgroundColor="@color/white_smoke"
+    app:strokeColor="@color/card_stroke"
+    app:cardBackgroundColor="@color/card_background"
     app:strokeWidth="1dp">
 
     <RelativeLayout
@@ -28,7 +28,7 @@
                 android:id="@+id/tvTestName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/soft_black"
+                android:textColor="@color/main_text"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:maxLines="1"
@@ -44,7 +44,7 @@
                     android:id="@+id/tvQuestionsCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/dimgray"
+                    android:textColor="@color/primary_text"
                     android:textSize="14sp"
                     android:drawablePadding="4dp"
                     android:drawableStart="@drawable/ic_question" />
@@ -54,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:textColor="@color/dimgray"
+                    android:textColor="@color/primary_text"
                     android:textSize="14sp"
                     android:drawablePadding="4dp"
                     android:drawableStart="@drawable/ic_star" />

@@ -16,10 +16,10 @@ import com.kychnoo.jdiary.R;
 public class NotificationHelper {
 
     public enum NotificationColor {
-        SUCCESS(R.color.successNotification),
-        ERROR(R.color.errorNotification),
-        WARNING(R.color.warningNotification),
-        INFO(R.color.infoNotification);
+        SUCCESS(R.color.success_notification),
+        ERROR(R.color.error_notification),
+        WARNING(R.color.warning_notification),
+        INFO(R.color.info_notification);
 
         private final int colorResId;
 

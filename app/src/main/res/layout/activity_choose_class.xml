@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:gravity="center_vertical"
-    android:background="@color/white_smoke">
+    android:background="@color/main_background">
 
     <Spinner
         android:id="@+id/spinnerClasses"
@@ -26,6 +26,7 @@
         android:padding="12dp"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:textColor="@color/snow"
         app:backgroundTint="@color/light_blue"/>
 
 </LinearLayout>

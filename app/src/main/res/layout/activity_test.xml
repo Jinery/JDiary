@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TestActivity"
-    android:background="@color/white_smoke">
+    android:background="@color/main_background">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -52,6 +52,7 @@
             android:padding="12dp"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:textColor="@color/snow"
             android:layout_margin="8dp"
             app:backgroundTint="@color/light_blue"/>
     </RelativeLayout>

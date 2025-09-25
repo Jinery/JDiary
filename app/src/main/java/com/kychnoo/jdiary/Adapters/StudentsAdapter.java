@@ -54,20 +54,29 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
 
         if(position < 3) {
             holder.ivRatingCup.setVisibility(View.VISIBLE);
+            int textColorIndex;
 
             switch(position) {
                 case 0:
                     holder.cardView.setBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.darkslate_blue));
                     holder.ivRatingCup.setImageResource(R.drawable.ic_gold_cup);
+                    holder.usernameText.setTextColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.snow));
+                    textColorIndex = ContextCompat.getColor(holder.cardView.getContext(), R.color.white_smoke);
+                    holder.tvDescription.setTextColor(textColorIndex);
+                    holder.tvExperincePoints.setTextColor(textColorIndex);
                     break;
                 case 1:
                     holder.cardView.setBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.lavender));
                     holder.ivRatingCup.setImageResource(R.drawable.ic_silver_cup);
+                    holder.usernameText.setTextColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.soft_black));
+                    textColorIndex = ContextCompat.getColor(holder.cardView.getContext(), R.color.deep_gray);
+                    holder.tvDescription.setTextColor(textColorIndex);
+                    holder.tvExperincePoints.setTextColor(textColorIndex);
                     break;
                 case 2:
                     holder.cardView.setBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.sienna));
                     holder.ivRatingCup.setImageResource(R.drawable.ic_bronze_cup);
-                    int textColorIndex = ContextCompat.getColor(holder.cardView.getContext(), R.color.white_smoke);
+                    textColorIndex = ContextCompat.getColor(holder.cardView.getContext(), R.color.white_smoke);
                     holder.tvDescription.setTextColor(textColorIndex);
                     holder.tvExperincePoints.setTextColor(textColorIndex);
                     break;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="4dp"
-    android:background="@color/white_smoke">
+    android:background="@color/main_background">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNotes"
@@ -24,7 +24,7 @@
         android:layout_margin="6dp"
         app:cornerRadius="8dp"
         app:backgroundTint="@color/light_blue"
-        android:textColor="@android:color/white"
+        android:textColor="@color/snow"
         android:textSize="16sp"/>
 
 </LinearLayout>

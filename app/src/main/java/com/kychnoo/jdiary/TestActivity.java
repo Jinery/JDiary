@@ -157,6 +157,7 @@ public class TestActivity extends AppCompatActivity {
 
             tvQuestion.setText(question.getText());
             rgAnswers.removeAllViews();
+            rgAnswers.clearCheck();
 
             List<Answer> randomizedAnswers = new ArrayList<>(question.getAnswers());
             Collections.shuffle(randomizedAnswers);
@@ -164,9 +165,9 @@ public class TestActivity extends AppCompatActivity {
             for (Answer answer : randomizedAnswers) {
                 MaterialRadioButton radioButton = new MaterialRadioButton(this);
                 radioButton.setText(answer.getText());
+                radioButton.setTextColor(ContextCompat.getColor(this, R.color.main_text));
                 radioButton.setId(View.generateViewId());
                 radioButton.setElevation(4);
-                radioButton.setTextColor(ContextCompat.getColor(this, R.color.soft_black));
                 radioButton.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.light_blue)));
 
                 rgAnswers.addView(radioButton);
@@ -186,6 +187,7 @@ public class TestActivity extends AppCompatActivity {
             });
 
             btnNext.setOnClickListener(v -> {
+                Log.d("TestActivity", "Chcked Radio button id: " + rgAnswers.getCheckedRadioButtonId());
                 if (rgAnswers.getCheckedRadioButtonId() == -1) {
                     NotificationHelper.show(this, "Выберите ответ", NotificationHelper.NotificationColor.WARNING, 1000);
                     return;

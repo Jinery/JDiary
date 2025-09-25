@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@color/white_smoke">
+    android:background="@color/main_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,10 +33,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@android:color/darker_gray"
+        android:background="@color/navigation_background"
         app:headerLayout="@layout/nav_header"
         app:itemIconTint="@color/light_blue"
-        app:itemTextColor="@color/black"
+        app:itemTextColor="@color/main_text"
         app:menu="@menu/drawer_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

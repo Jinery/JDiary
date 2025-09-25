@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:background="@color/white_smoke">
+    android:background="@color/main_background">
 
     <TextView
         android:id="@+id/tvAvialableSymvols"
@@ -18,8 +18,8 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:padding="6sp"
-        android:textColor="@color/soft_black"
-        android:textColorHint="@color/gray"
+        android:textColor="@color/main_text"
+        android:textColorHint="@color/input_hint"
         android:hint="Введите описание"
         android:layout_marginTop="6dp"
         android:inputType="textImeMultiLine"

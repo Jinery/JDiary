@@ -32,9 +32,33 @@
     <color name="darkslate_blue">#483D8B</color>
     <color name="epic_mystic_purple">#6C5B7B</color>
 
+    <!--  Main.  -->
+    <color name="main_background">#F5F5F5</color>
+    <color name="bottom">#e0e0e0</color>
+
+    <color name="card_background">#FFFAFA</color>
+    <color name="card_stroke">#D3D3D3</color>
+
+    <color name="progressbar_background">#DCDCDC</color>
+
+    <color name="navigation_background">#adadad</color>
+    <color name="navigation_header_background">#9e9e9e</color>
+
+    <!--  Texts.  -->
+    <color name="main_text">#1c1c1c</color>
+    <color name="primary_text">#828282</color>
+
+    <color name="reversed_main_text">#f2f2f2</color>
+
+    <!--  Inputs. -->
+    <color name="input_hint">#212121</color>
+
+    <!--  Tables.  -->
+    <color name="schedule_table_row">#808080</color>
+
     <!--  Only for notifications.  -->
-    <color name="errorNotification">#FF6B6B</color>
-    <color name="successNotification">#4CAF50</color>
-    <color name="warningNotification">#FFD700</color>
-    <color name="infoNotification">#F8F8FF</color>
+    <color name="error_notification">#FF6B6B</color>
+    <color name="success_notification">#4CAF50</color>
+    <color name="warning_notification">#FFD700</color>
+    <color name="info_notification">#F8F8FF</color>
 </resources>

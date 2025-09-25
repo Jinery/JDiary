@@ -155,7 +155,6 @@ public class NotesFragment extends Fragment implements NotesAdapter.OnNoteClickL
 
     private void showCheckNoteDialog(Note note) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Просмотр заметки");
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_check_note, null);
         TextView tvNoteTitle = dialogView.findViewById(R.id.tvNoteTitle);
