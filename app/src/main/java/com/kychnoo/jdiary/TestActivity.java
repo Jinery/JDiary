@@ -32,9 +32,11 @@ import com.google.android.material.shape.ShapeAppearanceModel;
 import com.kychnoo.jdiary.Achievements.AchievementsHelper;
 import com.kychnoo.jdiary.Adapters.AnswerAdapter;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
+import com.kychnoo.jdiary.Managers.AchievementManager;
 import com.kychnoo.jdiary.Notifications.NotificationHelper;
 import com.kychnoo.jdiary.OtherClasses.Answer;
 import com.kychnoo.jdiary.OtherClasses.Question;
+import com.kychnoo.jdiary.OtherClasses.TestResult;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -242,6 +244,7 @@ public class TestActivity extends AppCompatActivity {
         int totalQuestions = questionList.size();
         double percentage =  (correctAnswersCount / (double) totalQuestions) * 100;
         int score = calculateGrade(percentage);
+        String testName = databaseHelper.getTestNameById(testId);
         String exitText = "Выполнен тест: " + databaseHelper.getTestNameById(testId);
         databaseHelper.addTestResult(userPhone, testId, (int)percentage);
 
@@ -251,7 +254,19 @@ public class TestActivity extends AppCompatActivity {
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         databaseHelper.addGrade(userPhone, exitText, currentDate, score);
 
-        AchievementsHelper.passedTest(userPhone);
+        TestResult testResult = new TestResult(
+                userPhone,
+                testId,
+                testName,
+                totalQuestions,
+                correctAnswersCount,
+                percentage,
+                score,
+                experiencePoints,
+                percentage >= 50
+        );
+
+        AchievementManager.getInstance().notifyTestCompleted(testResult);
 
         NotificationHelper.show(this, "Тест завершен! Вы набрали " + experiencePoints + " баллов.", NotificationHelper.NotificationColor.INFO, 1000);
         finish();

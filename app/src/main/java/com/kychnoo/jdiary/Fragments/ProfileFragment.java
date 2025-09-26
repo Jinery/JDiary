@@ -10,19 +10,14 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,9 +74,6 @@ public class ProfileFragment extends Fragment {
 
     private List<Achievement> achievementsList;
 
-    private final int[] levelThresholds = { 100, 300, 500, 700, 900, 1100, 1500 };
-
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -123,7 +115,7 @@ public class ProfileFragment extends Fragment {
         achievementsAdapter = new AchievementsAdapter(achievementsList, requireContext());
         rvAchievements.setAdapter(achievementsAdapter);
 
-        tvDescription.setOnClickListener(v -> showEditDesriptionVindow(phone));
+        tvDescription.setOnClickListener(v -> showEditDesriptionWindow(phone));
 
         Cursor cursor = databaseHelper.getUserByPhone(phone);
         if (cursor != null && cursor.moveToFirst()) {
@@ -150,7 +142,7 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    private void showEditDesriptionVindow(String phone) {
+    private void showEditDesriptionWindow(String phone) {
         Cursor cursor = databaseHelper.getUserByPhone(phone);
         if(cursor != null && cursor.moveToFirst()) {
             String currentDescription = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION));
@@ -159,10 +151,10 @@ public class ProfileFragment extends Fragment {
             builder.setView(dialogView);
 
             EditText etDescription = dialogView.findViewById(R.id.etDescription);
-            TextView tvAvialableSymvols = dialogView.findViewById(R.id.tvAvialableSymvols);
+            TextView tvAvailableSymbols = dialogView.findViewById(R.id.tvAvialableSymvols);
 
             etDescription.setText(currentDescription);
-            updateCharCount(etDescription.getText().length(), tvAvialableSymvols);
+            updateCharCount(etDescription.getText().length(), tvAvailableSymbols);
 
             etDescription.setFilters(new InputFilter[] { new InputFilter.LengthFilter(35)});
 
@@ -174,7 +166,7 @@ public class ProfileFragment extends Fragment {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    updateCharCount(s.length(), tvAvialableSymvols);
+                    updateCharCount(s.length(), tvAvailableSymbols);
                 }
 
                 @Override
@@ -219,6 +211,13 @@ public class ProfileFragment extends Fragment {
         int progress = levelManager.getProgress(experiencePoints);
         int nextLevelThreshold = levelManager.getNextLevelThreshold(experiencePoints);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if(level == 1) {
+                pbLevel.setMin(0);
+            } else {
+                pbLevel.setMin(levelManager.getCurrentLevelThreshold(experiencePoints));
+            }
+        }
         pbLevel.setMax(nextLevelThreshold);
         pbLevel.setProgress(progress);
         tvUserPoints.setText(String.format("У вас %d >> %d очков", experiencePoints, nextLevelThreshold));
@@ -307,7 +306,8 @@ public class ProfileFragment extends Fragment {
                 int rarity = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ACHIEVEMENT_RARITY));
 
                 int iconResId = requireContext().getResources().getIdentifier(iconResName, "drawable", requireContext().getPackageName());
-                achievementsList.add(new Achievement(id, title, content, iconResId, rarity));
+                int backgroundColorId = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ACHIEVEMENT_BACKGROUND_COLOR));
+                achievementsList.add(new Achievement(id, title, content, iconResId, rarity, backgroundColorId));
             } while (cursor.moveToNext());
             cursor.close();
         }

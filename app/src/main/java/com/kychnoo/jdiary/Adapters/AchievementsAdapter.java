@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 import com.kychnoo.jdiary.OtherClasses.Achievement;
 import com.kychnoo.jdiary.R;
+import com.kychnoo.jdiary.Tools.ColorTools;
 
 import java.util.List;
 
@@ -44,6 +45,9 @@ public class AchievementsAdapter extends RecyclerView.Adapter<AchievementsAdapte
         holder.ivAchievement.setImageResource(achievement.getIconResId());
         holder.ivStatus.setImageResource(getIconForRarity(achievement.getRarity()));
 
+        holder.cardView.setCardBackgroundColor(achievement.getBackgroundColor());
+
+        adaptTextColorsToBackground(holder, achievement.getBackgroundColor());
         applyRarityStyle(holder, achievement.getRarity());
     }
 
@@ -59,28 +63,37 @@ public class AchievementsAdapter extends RecyclerView.Adapter<AchievementsAdapte
             case Achievement.RARITY_GOLD: return R.drawable.ic_trophy_gold;
             default: return R.drawable.ic_trophy_bronze;
         }
-    } 
+    }
+
+    private void adaptTextColorsToBackground(ViewHolder holder, int backgroundColor) {
+        if(ColorTools.isLightColor(backgroundColor)) {
+            holder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.near_black));
+            holder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.dimgray));
+        } else {
+            holder.tvTitle.setTextColor(ContextCompat.getColor(context, R.color.white_smoke));
+            holder.tvContent.setTextColor(ContextCompat.getColor(context, R.color.grainsboro));
+        }
+    }
 
     private void applyRarityStyle(ViewHolder holder, int rarity) {
-        int cardColor = ContextCompat.getColor(context, R.color.white_smoke);
-        int textColor = ContextCompat.getColor(context, R.color.near_black);
-
         switch (rarity) {
-            case Achievement.RARITY_BRONZE:
-                cardColor = ContextCompat.getColor(context, R.color.white_smoke);
-                textColor = ContextCompat.getColor(context, R.color.near_black);
             case Achievement.RARITY_SILVER:
-                cardColor = ContextCompat.getColor(context, R.color.silver);
-                textColor = ContextCompat.getColor(context, R.color.light_blue);
+                holder.cardView.setStrokeWidth(3);
+                holder.cardView.setStrokeColor(ContextCompat.getColor(context, R.color.silver));
                 break;
             case Achievement.RARITY_GOLD:
-                cardColor = ContextCompat.getColor(context, R.color.epic_mystic_purple);
-                textColor = ContextCompat.getColor(context, R.color.gold);
+                holder.cardView.setStrokeWidth(4);
+                holder.cardView.setStrokeColor(ContextCompat.getColor(context, R.color.gold));
+                break;
+            case Achievement.RARITY_BRONZE:
+                holder.cardView.setStrokeWidth(2);
+                holder.cardView.setStrokeColor(ContextCompat.getColor(context, R.color.bronze));
+                break;
+            default:
+                holder.cardView.setStrokeWidth(2);
+                holder.cardView.setStrokeColor(ContextCompat.getColor(context, R.color.card_stroke));
                 break;
         }
-
-        holder.cardView.setCardBackgroundColor(cardColor);
-        holder.tvTitle.setTextColor(textColor);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

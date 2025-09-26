@@ -13,14 +13,16 @@ public class Achievement {
     private String content;
     private int iconResId;
     private int rarity;
+    private int backgroundColor;
 
 
-    public Achievement(long id, String title, String content, int iconResId, int rarity) {
+    public Achievement(long id, String title, String content, int iconResId, int rarity, int backgroundColor) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.iconResId = iconResId;
         this.rarity = rarity;
+        this.backgroundColor = backgroundColor;
     }
 
     public long getId() {
@@ -35,13 +37,16 @@ public class Achievement {
         return content;
     }
 
-
     public int getRarity() {
         return rarity;
     }
 
     public int getIconResId() {
         return iconResId;
+    }
+
+    public  int getBackgroundColor() {
+        return backgroundColor;
     }
 
     public String getIconResName(Context context) {

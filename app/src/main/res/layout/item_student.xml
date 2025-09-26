@@ -87,11 +87,12 @@
                         android:textColor="@color/primary_text"/>
 
                     <ImageView
-                        android:id="@+id/ivStar"
+                        android:id="@+id/ivCoins"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:src="@drawable/ic_point"
-                        android:layout_marginStart="4dp" />
+                        android:src="@drawable/ic_coin"
+                        android:layout_marginStart="4dp"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
             </LinearLayout>
 

@@ -24,37 +24,37 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:contentDescription="Achievement icon"
-            android:padding="8dp"/>
+            android:padding="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/ivAchievement"
-            android:layout_toStartOf="@+id/ivStatus"
             android:layout_marginStart="16dp"
+            android:layout_toStartOf="@+id/ivStatus"
+            android:layout_toEndOf="@id/ivAchievement"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="Title"
                 android:textColor="@color/main_text"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:maxLines="1"
-                android:ellipsize="end"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:text="Content"
                 android:textColor="@color/dimgray"
-                android:textSize="16sp"
-                android:maxLines="2"
-                android:ellipsize="end"/>
+                android:textSize="16sp" />
         </LinearLayout>
 
         <ImageView
@@ -62,8 +62,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:contentDescription="Achievement status"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="6dp"
+            android:contentDescription="Achievement status" />
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>

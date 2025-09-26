@@ -6,15 +6,25 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.kychnoo.jdiary.Database.DatabaseHelper;
+import com.kychnoo.jdiary.Interfaces.AchievementEventListener;
+import com.kychnoo.jdiary.Managers.AchievementManager;
 import com.kychnoo.jdiary.OtherClasses.Achievement;
+import com.kychnoo.jdiary.OtherClasses.TestResult;
+import com.kychnoo.jdiary.R;
 
-public class AchievementsHelper {
+public class AchievementsHelper implements AchievementEventListener {
 
     private static DatabaseHelper databaseHelper;
+    private static AchievementsHelper instance;
 
     public static void initialize(Context context) {
         if (databaseHelper == null) {
             databaseHelper = new DatabaseHelper(context.getApplicationContext());
+        }
+
+        if (instance == null) {
+            instance = new AchievementsHelper();
+            AchievementManager.getInstance().registerListener(instance);
         }
 
         createAchievements();
@@ -23,11 +33,16 @@ public class AchievementsHelper {
     private static void createAchievements() {
 
         if(!databaseHelper.isAchievementExistsByName("Теперь я с вами"))
-            databaseHelper.addAchievement("Теперь я с вами", "Зарегистрироваться в приложении.", "ic_new_user", Achievement.RARITY_BRONZE);
+            databaseHelper.addAchievement("Теперь я с вами", "Зарегистрироваться в приложении.", "ic_waving_hand", Achievement.RARITY_BRONZE, R.color.very_light_blue);
 
         if(!databaseHelper.isAchievementExistsByName("Это только начало"))
-            databaseHelper.addAchievement("Это только начало", "Пройти свой первый тест.", "ic_first_test", Achievement.RARITY_BRONZE);
+            databaseHelper.addAchievement("Это только начало", "Пройти свой первый тест.", "ic_first_test", Achievement.RARITY_BRONZE, "#ffd375");
 
+    }
+
+    @Override
+    public void onTestCompleted(TestResult result) {
+        passedTest(result.getUserPhone());
     }
 
     public static void startApp(String phoneNumber) {
