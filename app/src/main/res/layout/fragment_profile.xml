@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="170dp"
         android:padding="16dp"
         android:background="@color/light_blue"
         android:orientation="vertical">
@@ -16,12 +16,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/ivUserIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:src="@drawable/ic_user_icon"
-                android:scaleType="fitCenter"/>
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                app:strokeColor="@color/red"
+                app:strokeWidth="4dp"
+                android:padding="8dp"
+                android:scaleType="centerCrop"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,6 +68,15 @@
                     android:textColor="@color/grainsboro"
                     android:maxLines="1"
                     android:ellipsize="end"/>
+
+                <ProgressBar
+                    android:id="@+id/pbLevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="9dp"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:progressDrawable="@drawable/rounded_progress_bar"
+                    android:progressTint="@color/very_light_blue"
+                    android:max="100"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

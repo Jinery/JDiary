@@ -6,9 +6,17 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,13 +38,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 import com.kychnoo.jdiary.Adapters.AchievementsAdapter;
 import com.kychnoo.jdiary.Database.DatabaseHelper;
 import com.kychnoo.jdiary.Interfaces.ToolbarTitleSetter;
+import com.kychnoo.jdiary.Managers.LevelManager;
 import com.kychnoo.jdiary.Notifications.NotificationHelper;
 import com.kychnoo.jdiary.OtherClasses.Achievement;
 import com.kychnoo.jdiary.R;
+import com.kychnoo.jdiary.Tools.BitmapTools;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,13 +59,17 @@ public class ProfileFragment extends Fragment {
     private static final int PICK_IMAGE_REQUEST = 1;
 
     private DatabaseHelper databaseHelper;
+    private BitmapTools bitmapTools;
+    private LevelManager levelManager;
     private String phone;
 
 
     private TextView tvDescription;
     private TextView tvUserPoints;
 
-    private ImageView ivUserIcon;
+    private ShapeableImageView ivUserIcon;
+
+    private ProgressBar pbLevel;
 
     private ToolbarTitleSetter toolbarTitleSetter;
 
@@ -62,6 +78,8 @@ public class ProfileFragment extends Fragment {
     private AchievementsAdapter achievementsAdapter;
 
     private List<Achievement> achievementsList;
+
+    private final int[] levelThresholds = { 100, 300, 500, 700, 900, 1100, 1500 };
 
 
     @Override
@@ -85,6 +103,8 @@ public class ProfileFragment extends Fragment {
         toolbarTitleSetter.setToolbarTitle("Профиль");
 
         databaseHelper = new DatabaseHelper(requireContext());
+        bitmapTools = BitmapTools.getInstance();
+        levelManager = LevelManager.getInstance(requireContext());
 
         phone = requireActivity().getIntent().getStringExtra("phone");
 
@@ -93,6 +113,7 @@ public class ProfileFragment extends Fragment {
         tvDescription = view.findViewById(R.id.tvUserDescription);
         tvUserPoints = view.findViewById(R.id.tvUserPoints);
         ivUserIcon = view.findViewById(R.id.ivUserIcon);
+        pbLevel =  view.findViewById(R.id.pbLevel);
 
         rvAchievements = view.findViewById(R.id.rvAchievements);
         rvAchievements.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -110,10 +131,11 @@ public class ProfileFragment extends Fragment {
             String userClass = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CLASS));
             String userDescription = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION));
             String userPoints = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_EXPERIENCE_POINTS));
+            int experiencePoints = Integer.parseInt(userPoints);
+            updateUserLevelInfo(experiencePoints);
             String userIconPath = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USER_ICON));
             tvUsername.setText(username);
             tvClass.setText("Ученик " + userClass + " класса.");
-            tvUserPoints.setText("У вас " + userPoints + " очков.");
             updateUserDescription(userDescription);
             updateUserIcon(userIconPath);
             cursor.close();
@@ -189,6 +211,23 @@ public class ProfileFragment extends Fragment {
             tvDescription.setText(newDescription);
     }
 
+    private void updateUserLevelInfo(int experiencePoints) {
+        if(levelManager == null) return;
+
+
+        int level = levelManager.getLevel(experiencePoints);
+        int progress = levelManager.getProgress(experiencePoints);
+        int nextLevelThreshold = levelManager.getNextLevelThreshold(experiencePoints);
+
+        pbLevel.setMax(nextLevelThreshold);
+        pbLevel.setProgress(progress);
+        tvUserPoints.setText(String.format("У вас %d >> %d очков", experiencePoints, nextLevelThreshold));
+
+        int colorForLevel = levelManager.getColorForLevel(level);
+        ivUserIcon.setStrokeColor(ColorStateList.valueOf(colorForLevel));
+        pbLevel.setProgressTintList(ColorStateList.valueOf(colorForLevel));
+    }
+
     private void showIconSelectionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Выбрать иконку");
@@ -234,7 +273,7 @@ public class ProfileFragment extends Fragment {
                 ivHeaderIcon = headerView.findViewById(R.id.ivHeaderUserIcon);
             }
         }
-        if (imageUriString == null || imageUriString.isEmpty()) {
+        if (TextUtils.isEmpty(imageUriString)) {
             ivUserIcon.setImageResource(R.drawable.ic_user_icon);
             return;
         }
@@ -243,9 +282,10 @@ public class ProfileFragment extends Fragment {
         try (InputStream inputStream = requireContext().getContentResolver().openInputStream(imageUri)) {
             if (inputStream != null) {
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                ivUserIcon.setImageBitmap(bitmap);
+                Bitmap roundedBitmap = bitmapTools.getRoundedBitmap(bitmap);
+                ivUserIcon.setImageBitmap(roundedBitmap);
                 if(ivHeaderIcon != null)
-                    ivHeaderIcon.setImageBitmap(bitmap);
+                    ivHeaderIcon.setImageBitmap(roundedBitmap);
             } else {
                 throw new IOException("Не удалось открыть файл");
             }

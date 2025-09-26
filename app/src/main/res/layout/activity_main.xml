@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/light_blue"
-            app:titleTextColor="@android:color/darker_gray"
+            app:titleTextColor="@color/snow"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <FrameLayout

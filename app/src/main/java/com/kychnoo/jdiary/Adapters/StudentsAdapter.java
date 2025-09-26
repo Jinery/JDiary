@@ -1,7 +1,6 @@
 package com.kychnoo.jdiary.Adapters;
 
-import static androidx.core.content.ContentProviderCompat.requireContext;
-
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -17,8 +16,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.kychnoo.jdiary.Managers.LevelManager;
 import com.kychnoo.jdiary.OtherClasses.Student;
 import com.kychnoo.jdiary.R;
+import com.kychnoo.jdiary.Tools.BitmapTools;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,6 +44,13 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
     @Override
     public void onBindViewHolder(@NonNull StudentViewHolder holder, int position) {
         Student student = studentList.get(position);
+
+        LevelManager levelManager = LevelManager.getInstance(holder.itemView.getContext());
+
+        int experiencePoints = student.getExperiencePoints();
+        int level = levelManager.getLevel(experiencePoints);
+        int colorForLevel = levelManager.getColorForLevel(level);
+
         holder.usernameText.setText(student.getUsername());
         final String userDescription = student.getDescriptionText();
         if(TextUtils.isEmpty(userDescription))
@@ -51,6 +60,9 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
 
         holder.tvExperincePoints.setText("Очков: " + student.getExperiencePoints());
         holder.bindIcon(student.getIconPath());
+
+        holder.ivUserIcon.setStrokeColor(ColorStateList.valueOf(colorForLevel));
+        holder.ivUserIcon.setStrokeWidth(3f);
 
         if(position < 3) {
             holder.ivRatingCup.setVisibility(View.VISIBLE);
@@ -98,7 +110,7 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
         TextView tvDescription;
         TextView tvExperincePoints;
         TextView tvPosition;
-        ImageView ivUserIcon;
+        ShapeableImageView ivUserIcon;
 
         ImageView ivRatingCup;
 
@@ -114,7 +126,7 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
         }
 
         public void bindIcon(String imageUri) {
-            if (imageUri == null || imageUri.isEmpty()) {
+            if (TextUtils.isEmpty(imageUri)) {
                 ivUserIcon.setImageResource(R.drawable.ic_user_icon);
                 return;
             }
@@ -122,7 +134,8 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
             try (InputStream inputStream = itemView.getContext().getContentResolver().openInputStream(Uri.parse(imageUri))) {
                 if (inputStream != null) {
                     Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                    ivUserIcon.setImageBitmap(bitmap);
+                    Bitmap roundedBitmap = BitmapTools.getInstance().getRoundedBitmap(bitmap);
+                    ivUserIcon.setImageBitmap(roundedBitmap);
                 }
             } catch (IOException e) {
                 ivUserIcon.setImageResource(R.drawable.ic_user_icon);

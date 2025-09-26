@@ -25,6 +25,7 @@ import com.kychnoo.jdiary.Fragments.ScheduleFragment;
 import com.kychnoo.jdiary.Fragments.TestsFragment;
 import com.kychnoo.jdiary.Interfaces.ToolbarTitleSetter;
 import com.kychnoo.jdiary.TestsHelper.TestsInitializator;
+import com.kychnoo.jdiary.Tools.BitmapTools;
 
 public class MainActivity extends AppCompatActivity implements ToolbarTitleSetter {
 
