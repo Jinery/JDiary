@@ -30,6 +30,7 @@
     <color name="orange">#FFA500</color>
 
     <color name="gold">#FFD700</color>
+    <color name="dark_yellow">#d1b000</color>
 
     <color name="bronze">#CD7F32</color>
 
@@ -59,6 +60,12 @@
 
     <!--  Tables.  -->
     <color name="schedule_table_row">#808080</color>
+
+    <!--  Grade cards.  -->
+    <color name="great_card">#7bff61</color>
+    <color name="cool_card">#5297ff</color>
+    <color name="good_card">#fff86b</color>
+    <color name="bad_card">#ff3b3b</color>
 
     <!--  Only for notifications.  -->
     <color name="error_notification">#FF6B6B</color>

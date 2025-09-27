@@ -82,7 +82,7 @@ public class DiaryFragment extends Fragment {
                 gradeList.add(new Grade(id, userPhone, gradeText, "Дата: " + date, score));
             }
             cursor.close();
-            gradesAdapter = new GradesAdapter(gradeList);
+            gradesAdapter = new GradesAdapter(gradeList, requireContext());
             rvGrades.setAdapter(gradesAdapter);
         }
 

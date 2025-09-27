@@ -8,13 +8,14 @@
         android:id="@+id/tvStudentsInClass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center"
         android:text="In ClassRoom"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/main_text"
         android:maxLines="1"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:padding="8dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/classRecyclerView"

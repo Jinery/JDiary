@@ -220,7 +220,7 @@ public class ProfileFragment extends Fragment {
         }
         pbLevel.setMax(nextLevelThreshold);
         pbLevel.setProgress(progress);
-        tvUserPoints.setText(String.format("У вас %d >> %d очков", experiencePoints, nextLevelThreshold));
+        tvUserPoints.setText(String.format("У вас %d из %d очков", experiencePoints, nextLevelThreshold));
 
         int colorForLevel = levelManager.getColorForLevel(level);
         ivUserIcon.setStrokeColor(ColorStateList.valueOf(colorForLevel));

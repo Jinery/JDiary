@@ -678,7 +678,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getUserAchievements(String userPhone) {
         SQLiteDatabase database = this.getReadableDatabase();
-        String query = "SELECT a." + COLUMN_ACHIEVEMENT_ID + ", a." + COLUMN_ACHIEVEMENT_TITLE + ", a." + COLUMN_ACHIEVEMENT_CONTENT + ", a." + COLUMN_ACHIEVEMENT_ICON + ", a." + COLUMN_ACHIEVEMENT_RARITY + ", a." + COLUMN_ACHIEVEMENT_BACKGROUND_COLOR + // ← ДОБАВЬТЕ ЭТО
+        String query = "SELECT a." + COLUMN_ACHIEVEMENT_ID + ", a." + COLUMN_ACHIEVEMENT_TITLE + ", a." + COLUMN_ACHIEVEMENT_CONTENT + ", a." + COLUMN_ACHIEVEMENT_ICON + ", a." + COLUMN_ACHIEVEMENT_RARITY + ", a." + COLUMN_ACHIEVEMENT_BACKGROUND_COLOR +
                 " FROM " + TABLE_ACHIEVEMENTS + " a " +
                 "JOIN " + TABLE_USER_ACHIEVEMENTS + " ua ON a." + COLUMN_ACHIEVEMENT_ID + " = ua." + COLUMN_USER_ACHIEVEMENT_ACHIEVEMENT_ID +
                 " WHERE ua." + COLUMN_USER_ACHIEVEMENT_USER_PHONE + " = ?";

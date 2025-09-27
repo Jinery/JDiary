@@ -57,6 +57,12 @@
     <!--  Tables.  -->
     <color name="schedule_table_row">#919191</color>
 
+    <!--  Grade cards.  -->
+    <color name="great_card">#4fff2b</color>
+    <color name="cool_card">#3083ff</color>
+    <color name="good_card">#fff642</color>
+    <color name="bad_card">#ff2121</color>
+
     <!--  Inputs. -->
     <color name="input_hint">#d4d4d4</color>
 

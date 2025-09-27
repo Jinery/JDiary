@@ -1,5 +1,6 @@
 package com.kychnoo.jdiary.Adapters;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -70,15 +71,17 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
 
             switch(position) {
                 case 0:
-                    holder.cardView.setBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.darkslate_blue));
+                    holder.cardView.setBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.gold));
+                    holder.cardView.setStrokeColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.dark_yellow));
                     holder.ivRatingCup.setImageResource(R.drawable.ic_gold_cup);
-                    holder.usernameText.setTextColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.snow));
-                    textColorIndex = ContextCompat.getColor(holder.cardView.getContext(), R.color.white_smoke);
+                    holder.usernameText.setTextColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.soft_black));
+                    textColorIndex = ContextCompat.getColor(holder.cardView.getContext(), R.color.deep_gray);
                     holder.tvDescription.setTextColor(textColorIndex);
                     holder.tvExperincePoints.setTextColor(textColorIndex);
                     break;
                 case 1:
-                    holder.cardView.setBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.lavender));
+                    holder.cardView.setBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.silver));
+                    holder.cardView.setStrokeColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.silver));
                     holder.ivRatingCup.setImageResource(R.drawable.ic_silver_cup);
                     holder.usernameText.setTextColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.soft_black));
                     textColorIndex = ContextCompat.getColor(holder.cardView.getContext(), R.color.deep_gray);
@@ -87,8 +90,9 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
                     break;
                 case 2:
                     holder.cardView.setBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.sienna));
+                    holder.cardView.setStrokeColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.sienna));
                     holder.ivRatingCup.setImageResource(R.drawable.ic_bronze_cup);
-                    textColorIndex = ContextCompat.getColor(holder.cardView.getContext(), R.color.white_smoke);
+                    textColorIndex = ContextCompat.getColor(holder.cardView.getContext(), R.color.soft_black);
                     holder.tvDescription.setTextColor(textColorIndex);
                     holder.tvExperincePoints.setTextColor(textColorIndex);
                     break;
