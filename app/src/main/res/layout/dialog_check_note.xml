@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/card_background">
 
     <TextView
         android:id="@+id/tvNoteTitle"
@@ -23,4 +25,28 @@
         android:textColor="@color/main_text"
         android:padding="4dp"/>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCloseNote"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            app:cornerRadius="8dp"
+            app:strokeWidth="2.5dp"
+            app:strokeColor="@color/light_blue"
+            android:backgroundTint="@android:color/transparent"
+            android:text="@string/close"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/light_blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="12dp"
+            android:padding="15dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

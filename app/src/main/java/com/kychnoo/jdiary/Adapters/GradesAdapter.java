@@ -62,7 +62,7 @@ public class GradesAdapter extends RecyclerView.Adapter<GradesAdapter.GradesView
                 break;
         }
 
-        holder.cardView.setBackgroundColor(backgroundCardColor);
+        holder.cardView.setCardBackgroundColor(backgroundCardColor);
 
         holder.tvGradeText.setText(grade.getGradeText());
         holder.tvDate.setText(grade.getDate());

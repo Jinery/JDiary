@@ -1,31 +1,20 @@
 package com.kychnoo.jdiary.Fragments;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,10 +26,8 @@ import com.kychnoo.jdiary.Interfaces.ToolbarTitleSetter;
 import com.kychnoo.jdiary.OtherClasses.Note;
 import com.kychnoo.jdiary.R;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -123,34 +110,44 @@ public class NotesFragment extends Fragment implements NotesAdapter.OnNoteClickL
 
     private void showAddNoteDialog(Note note) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle(note == null ? "Добавить заметку" : "Редактировать заметку");
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_note, null);
+        TextView tvNoteTitle = dialogView.findViewById(R.id.tvNoteTitle);
         EditText editTextTitle = dialogView.findViewById(R.id.edit_text_title);
         EditText editTextContent = dialogView.findViewById(R.id.edit_text_content);
+        Button btnSaveNote = dialogView.findViewById(R.id.btnSave);
+        Button btnCancelNote = dialogView.findViewById(R.id.btnCancel);
+
+        tvNoteTitle.setText(note == null ? "Добавить заметку" : "Редактировать заметку");
+
+        builder.setView(dialogView);
 
         if (note != null) {
             editTextTitle.setText(note.getTitle());
             editTextContent.setText(note.getContent());
         }
 
+        AlertDialog dialog = builder.create();
 
-        builder.setView(dialogView)
-                .setPositiveButton("Сохранить", (dialog, which) -> {
-                    String title = editTextTitle.getText().toString().trim();
-                    String content = editTextContent.getText().toString().trim();
-                    String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+        dialog.show();
 
-                    if (note == null) {
-                        databaseHelper.addNote(phone, title, content, date);
-                    } else {
-                        databaseHelper.updateNote(note.getId(), title, content, date);
-                    }
-                    loadNotes();
-                })
-                .setNegativeButton("Отмена", (dialog, which) -> dialog.dismiss());
+        btnSaveNote.setOnClickListener(view -> {
+            String title = editTextTitle.getText().toString().trim();
+            String content = editTextContent.getText().toString().trim();
+            String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
-        builder.create().show();
+            if (note == null) {
+                databaseHelper.addNote(phone, title, content, date);
+            } else {
+                databaseHelper.updateNote(note.getId(), title, content, date);
+            }
+            loadNotes();
+            dialog.dismiss();
+        });
+
+        btnCancelNote.setOnClickListener(view -> {
+            if(dialog.isShowing()) dialog.dismiss(); dialog.dismiss();
+        });
     }
 
     private void showCheckNoteDialog(Note note) {
@@ -159,16 +156,22 @@ public class NotesFragment extends Fragment implements NotesAdapter.OnNoteClickL
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_check_note, null);
         TextView tvNoteTitle = dialogView.findViewById(R.id.tvNoteTitle);
         TextView tvNoteContent = dialogView.findViewById(R.id.tvNoteContent);
+        Button btnCloseNote = dialogView.findViewById(R.id.btnCloseNote);
+
+        builder.setView(dialogView);
 
         if (note != null) {
             tvNoteTitle.setText(note.getTitle());
             tvNoteContent.setText(note.getContent());
         }
 
-        builder.setView(dialogView)
-                .setNegativeButton("Закрыть", (dialog, which) -> dialog.dismiss());
+        AlertDialog dialog = builder.create();
 
-        builder.create().show();
+        dialog.show();
+
+        btnCloseNote.setOnClickListener(view -> {
+            if(dialog.isShowing()) dialog.dismiss(); dialog.dismiss();
+        });
     }
 
     @Override

@@ -11,8 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/main_text"
-        android:text="Test Count"
-        android:textSize="20sp"
+        android:text="Тесты"
+        android:textSize="24sp"
         android:textStyle="bold"/>
 
     <androidx.recyclerview.widget.RecyclerView

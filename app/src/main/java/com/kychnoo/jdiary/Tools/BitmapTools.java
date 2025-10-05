@@ -21,7 +21,7 @@ public class BitmapTools {
 
     public Bitmap getRoundedBitmap(Bitmap bitmap) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        float radius = (bitmap.getWidth() / 2f) - 1f;
+        float radius = (bitmap.getWidth() / 2f);
         Canvas canvas = new Canvas(output);
         Paint paint = new Paint();
 

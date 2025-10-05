@@ -12,9 +12,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
         android:textSize="20sp"
         android:text="@string/welcome_login_text"
         android:textColor="@color/main_text"
+        android:textStyle="bold"
         android:padding="12dp"
         android:layout_marginBottom="6dp"/>
 
@@ -22,37 +24,41 @@
         android:id="@+id/etPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="6dp"
-        android:layout_marginBottom="6dp"
+        android:padding="14dp"
+        android:layout_marginBottom="10dp"
         android:textColor="@color/main_text"
         android:textColorHint="@color/input_hint"
+        android:textSize="20sp"
         android:hint="@string/edit_text_phone_number"
         android:inputType="phone"
-        android:background="@drawable/rounded_edit_text"/>
+        android:maxLines="1"
+        android:background="@drawable/rounded_edit_text" />
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="6dp"
+        android:padding="14dp"
         android:textColor="@color/main_text"
         android:textColorHint="@color/input_hint"
+        android:textSize="20sp"
         android:hint="@string/edit_text_password"
         android:inputType="textPassword"
+        android:maxLines="1"
         android:background="@drawable/rounded_edit_text"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
         android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="Вход"
         app:cornerRadius="8dp"
-        android:padding="12dp"
-        android:textSize="16sp"
+        android:padding="14dp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/snow"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="12dp"
         app:backgroundTint="@color/light_blue"/>
 
     <TextView
@@ -76,7 +82,8 @@
         android:padding="12dp"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/snow"
-        app:backgroundTint="@color/light_blue" />
+        android:textColor="@color/light_blue"
+        app:strokeWidth="2.5dp"
+        app:strokeColor="@color/light_blue"/>
 
 </LinearLayout>

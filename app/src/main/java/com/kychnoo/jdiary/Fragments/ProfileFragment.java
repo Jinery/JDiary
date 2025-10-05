@@ -17,10 +17,10 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -115,7 +115,7 @@ public class ProfileFragment extends Fragment {
         achievementsAdapter = new AchievementsAdapter(achievementsList, requireContext());
         rvAchievements.setAdapter(achievementsAdapter);
 
-        tvDescription.setOnClickListener(v -> showEditDesriptionWindow(phone));
+        tvDescription.setOnClickListener(v -> showEditDescriptionWindow(phone));
 
         Cursor cursor = databaseHelper.getUserByPhone(phone);
         if (cursor != null && cursor.moveToFirst()) {
@@ -142,7 +142,7 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    private void showEditDesriptionWindow(String phone) {
+    private void showEditDescriptionWindow(String phone) {
         Cursor cursor = databaseHelper.getUserByPhone(phone);
         if(cursor != null && cursor.moveToFirst()) {
             String currentDescription = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION));
@@ -151,7 +151,9 @@ public class ProfileFragment extends Fragment {
             builder.setView(dialogView);
 
             EditText etDescription = dialogView.findViewById(R.id.etDescription);
-            TextView tvAvailableSymbols = dialogView.findViewById(R.id.tvAvialableSymvols);
+            TextView tvAvailableSymbols = dialogView.findViewById(R.id.tvAvailableSymbols);
+            Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+            Button btnSave = dialogView.findViewById(R.id.btnSave);
 
             etDescription.setText(currentDescription);
             updateCharCount(etDescription.getText().length(), tvAvailableSymbols);
@@ -175,15 +177,20 @@ public class ProfileFragment extends Fragment {
                 }
             });
 
-            builder.setPositiveButton("Сохранить", (dialog, which) -> {
+            AlertDialog dialog = builder.create();
+
+            dialog.show();
+
+            btnSave.setOnClickListener(view -> {
                 String newDescription = etDescription.getText().toString();
                 databaseHelper.updateUserDescription(phone, newDescription);
                 updateUserDescription(newDescription);
+                dialog.dismiss();
             });
 
-            builder.setNegativeButton("Отмена", (dialog, which) -> dialog.dismiss());
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            btnCancel.setOnClickListener(view -> {
+                if(dialog.isShowing()) dialog.dismiss();
+            });
         }
         else
         {
@@ -228,18 +235,10 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showIconSelectionDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Выбрать иконку");
-
-        builder.setPositiveButton("Из галереи", (dialog, which) -> {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("image/*");
             startActivityForResult(intent, PICK_IMAGE_REQUEST);
-        });
-
-        builder.setNegativeButton("Отмена", (dialog, which) -> dialog.dismiss());
-        builder.show();
     }
 
     @Override

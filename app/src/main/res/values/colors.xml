@@ -67,6 +67,16 @@
     <color name="good_card">#fff86b</color>
     <color name="bad_card">#ff3b3b</color>
 
+    <!-- Lesson cards. -->
+    <color name="math_color">#40d6c7</color>
+    <color name="language_color">#db7046</color>
+    <color name="physics_color">#1c64ff</color>
+    <color name="chemistry_color">#e65010</color>
+    <color name="biology_color">#00bd32</color>
+    <color name="history_color">#ededd5</color>
+    <color name="english_color">#eded00</color>
+    <color name="sport_color">#ffa600</color>
+
     <!--  Only for notifications.  -->
     <color name="error_notification">#FF6B6B</color>
     <color name="success_notification">#4CAF50</color>

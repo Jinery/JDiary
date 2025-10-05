@@ -71,7 +71,7 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
 
             switch(position) {
                 case 0:
-                    holder.cardView.setBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.gold));
+                    holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.gold));
                     holder.cardView.setStrokeColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.dark_yellow));
                     holder.ivRatingCup.setImageResource(R.drawable.ic_gold_cup);
                     holder.usernameText.setTextColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.soft_black));
@@ -80,7 +80,7 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
                     holder.tvExperincePoints.setTextColor(textColorIndex);
                     break;
                 case 1:
-                    holder.cardView.setBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.silver));
+                    holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.silver));
                     holder.cardView.setStrokeColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.silver));
                     holder.ivRatingCup.setImageResource(R.drawable.ic_silver_cup);
                     holder.usernameText.setTextColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.soft_black));
@@ -89,7 +89,7 @@ public class StudentsAdapter extends RecyclerView.Adapter<StudentsAdapter.Studen
                     holder.tvExperincePoints.setTextColor(textColorIndex);
                     break;
                 case 2:
-                    holder.cardView.setBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.sienna));
+                    holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.sienna));
                     holder.cardView.setStrokeColor(ContextCompat.getColor(holder.cardView.getContext(), R.color.sienna));
                     holder.ivRatingCup.setImageResource(R.drawable.ic_bronze_cup);
                     textColorIndex = ContextCompat.getColor(holder.cardView.getContext(), R.color.soft_black);

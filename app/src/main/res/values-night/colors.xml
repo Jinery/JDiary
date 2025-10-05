@@ -66,6 +66,16 @@
     <!--  Inputs. -->
     <color name="input_hint">#d4d4d4</color>
 
+    <!-- Lesson cards. -->
+    <color name="math_color">#37a69b</color>
+    <color name="language_color">#ad5937</color>
+    <color name="physics_color">#1752d1</color>
+    <color name="chemistry_color">#b7410e</color>
+    <color name="biology_color">#009e2a</color>
+    <color name="history_color">#d1d1ba</color>
+    <color name="english_color">#c7c700</color>
+    <color name="sport_color">#db8f00</color>
+
     <!--  Only for notifications.  -->
     <color name="error_notification">#ff4747</color>
     <color name="success_notification">#3eab42</color>
